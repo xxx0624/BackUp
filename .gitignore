@@ -1,5 +1,5 @@
-.jar
-.jpg
-.png
-.pyc
+*.jar
+*.jpg
+*.png
+*.pyc
 .idea/
