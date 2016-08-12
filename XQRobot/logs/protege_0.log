@@ -1,0 +1,124 @@
+2015.03.24 22:41:22.419 CST INFO: *** SYSTEM START ***
+2015.03.24 22:41:23.265 CST WARNING: [Local Folder Repository] The specified file must be a directory. (C:\Users\sj\Workspaces\MyEclipse 10\XQRobot\plugins\edu.stanford.smi.protegex.owl) -- LocalFolderRepository.update()
+2015.03.24 22:41:23.314 CST INFO: Loading triples for: null -- ProtegeOWLParser.loadTriples()
+2015.03.24 22:41:23.538 CST INFO:     Completed triple loading after 222 ms -- ProtegeOWLParser.loadTriples()
+2015.03.24 22:41:23.539 CST INFO: Postprocess: Process entities with incorrect Java type (0 entities) ...  -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 22:41:23.540 CST INFO: 1 ms
+ -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 22:41:23.540 CST INFO: Postprocess: Process metaclasses (3 metaclasses) ...  -- TriplePostProcessor.processMetaclasses()
+2015.03.24 22:41:23.540 CST INFO: 0 ms
+ -- TriplePostProcessor.processMetaclasses()
+2015.03.24 22:41:23.541 CST INFO: Postprocess: Process subclasses of rdf:List (1 classes) ...  -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 22:41:23.541 CST INFO: 0 ms
+ -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 22:41:23.541 CST INFO: Postprocess: Instances with multiple types (255 instances) ...  -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 22:41:23.543 CST INFO: 2 ms
+ -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 22:41:23.543 CST INFO: Postprocess: Add inferred superclasses ...  -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 22:41:23.549 CST INFO: 6 ms
+ -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 22:41:23.552 CST INFO: Postprocess: Process orphan classes (687 classes) ...  -- TriplePostProcessor.processOrphanClses()
+2015.03.24 22:44:44.317 CST INFO: *** SYSTEM START ***
+2015.03.24 22:44:44.716 CST WARNING: [Local Folder Repository] The specified file must be a directory. (C:\Users\sj\Workspaces\MyEclipse 10\XQRobot\plugins\edu.stanford.smi.protegex.owl) -- LocalFolderRepository.update()
+2015.03.24 22:44:44.741 CST INFO: Loading triples for: null -- ProtegeOWLParser.loadTriples()
+2015.03.24 22:44:44.968 CST INFO:     Completed triple loading after 225 ms -- ProtegeOWLParser.loadTriples()
+2015.03.24 22:44:44.969 CST INFO: Postprocess: Process entities with incorrect Java type (0 entities) ...  -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 22:44:44.970 CST INFO: 0 ms
+ -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 22:44:44.970 CST INFO: Postprocess: Process metaclasses (3 metaclasses) ...  -- TriplePostProcessor.processMetaclasses()
+2015.03.24 22:44:44.970 CST INFO: 0 ms
+ -- TriplePostProcessor.processMetaclasses()
+2015.03.24 22:44:44.971 CST INFO: Postprocess: Process subclasses of rdf:List (1 classes) ...  -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 22:44:44.971 CST INFO: 0 ms
+ -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 22:44:44.971 CST INFO: Postprocess: Instances with multiple types (255 instances) ...  -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 22:44:44.973 CST INFO: 1 ms
+ -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 22:44:44.973 CST INFO: Postprocess: Add inferred superclasses ...  -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 22:44:44.979 CST INFO: 6 ms
+ -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 22:44:44.982 CST INFO: Postprocess: Process orphan classes (687 classes) ...  -- TriplePostProcessor.processOrphanClses()
+2015.03.24 22:44:46.483 CST INFO: 1501 ms
+ -- TriplePostProcessor.processOrphanClses()
+2015.03.24 22:44:46.483 CST INFO: Postprocess: Generalized Concept Inclusion (0 axioms) ...  -- TriplePostProcessor.processGeneralizedConceptInclusions()
+2015.03.24 22:44:46.500 CST INFO: 16 ms
+ -- TriplePostProcessor.processGeneralizedConceptInclusions()
+2015.03.24 22:44:46.500 CST INFO: Postprocess: Abstract classes...  -- TriplePostProcessor.processAbstractClasses()
+2015.03.24 22:44:46.500 CST INFO: 0 ms
+ -- TriplePostProcessor.processAbstractClasses()
+2015.03.24 22:44:46.501 CST INFO: Postprocess: Domain and range of properties...  -- TriplePostProcessor.processDomainAndRange()
+2015.03.24 22:44:46.501 CST INFO: 0 ms
+ -- TriplePostProcessor.processDomainAndRange()
+2015.03.24 22:44:46.502 CST INFO: Postprocess: Possibly typed entities (0 resources) ...  -- TriplePostProcessor.processPossiblyTypedResources()
+2015.03.24 22:44:46.502 CST INFO: 0 ms
+ -- TriplePostProcessor.processPossiblyTypedResources()
+2015.03.24 22:44:46.502 CST INFO: Updating underlying frames model in 0 ms -- ProtegeOWLParser.doFinalPostProcessing()
+2015.03.24 22:49:20.211 CST INFO: *** SYSTEM START ***
+2015.03.24 22:49:20.615 CST WARNING: [Local Folder Repository] The specified file must be a directory. (C:\Users\sj\Workspaces\MyEclipse 10\XQRobot\plugins\edu.stanford.smi.protegex.owl) -- LocalFolderRepository.update()
+2015.03.24 22:49:20.642 CST INFO: Loading triples for: null -- ProtegeOWLParser.loadTriples()
+2015.03.24 23:05:38.160 CST SEVERE: An error occurred at parsing the OWL ontology 
+
+    null
+
+    at line -1 and column -1.
+    Jena parse error message: Premature end of file. -- org.xml.sax.SAXParseException: Premature end of file.
+	at org.apache.xerces.util.ErrorHandlerWrapper.createSAXParseException(Unknown Source)
+	at org.apache.xerces.util.ErrorHandlerWrapper.fatalError(Unknown Source)
+	at org.apache.xerces.impl.XMLErrorReporter.reportError(Unknown Source)
+	at org.apache.xerces.impl.XMLErrorReporter.reportError(Unknown Source)
+	at org.apache.xerces.impl.XMLScanner.reportFatalError(Unknown Source)
+	at org.apache.xerces.impl.XMLDocumentScannerImpl$XMLDeclDispatcher.dispatch(Unknown Source)
+	at org.apache.xerces.impl.XMLDocumentFragmentScannerImpl.scanDocument(Unknown Source)
+	at org.apache.xerces.parsers.DTDConfiguration.parse(Unknown Source)
+	at org.apache.xerces.parsers.DTDConfiguration.parse(Unknown Source)
+	at org.apache.xerces.parsers.XMLParser.parse(Unknown Source)
+	at org.apache.xerces.parsers.AbstractSAXParser.parse(Unknown Source)
+	at com.hp.hpl.jena.rdf.arp.impl.RDFXMLParser.parse(RDFXMLParser.java:142)
+	at com.hp.hpl.jena.rdf.arp.impl.RDFXMLParser.parse(RDFXMLParser.java:126)
+	at com.hp.hpl.jena.rdf.arp.ARP.load(ARP.java:124)
+	at edu.stanford.smi.protegex.owl.jena.parser.ProtegeOWLParser$2.invokeARP(ProtegeOWLParser.java:145)
+	at edu.stanford.smi.protegex.owl.jena.parser.ProtegeOWLParser.loadTriples(ProtegeOWLParser.java:299)
+	at edu.stanford.smi.protegex.owl.jena.parser.ProtegeOWLParser.run(ProtegeOWLParser.java:249)
+	at edu.stanford.smi.protegex.owl.jena.creator.OwlProjectFromReaderCreator.create(OwlProjectFromReaderCreator.java:70)
+	at edu.stanford.smi.protegex.owl.ProtegeOWL.createJenaOWLModelFromReader(ProtegeOWL.java:96)
+	at com.shenji.onto.editer.server.OntologyDBServer.getJenaOWLModelFromMySQL(OntologyDBServer.java:161)
+	at com.shenji.onto.editer.server.OntologyManage.initOWLModel(OntologyManage.java:389)
+	at com.shenji.onto.editer.server.OntologyManage.<init>(OntologyManage.java:103)
+	at com.shenji.onto.editer.server.OpenFileList$OpenFileBean.<init>(OpenFileList.java:274)
+	at com.shenji.onto.editer.server.OpenFileList.addOpenFileBean(OpenFileList.java:82)
+	at com.shenji.onto.editer.server.OntologyServer.openOntologyFromDB(OntologyServer.java:175)
+	at com.shenji.robot.webservices.port.OntoEdit.openOntologyFromDB(OntoEdit.java:53)
+	at com.shenji.robot.webservices.port.test.DPort.main(DPort.java:13)
+
+2015.03.24 23:05:38.161 CST INFO:     Completed triple loading after 977517 ms -- ProtegeOWLParser.loadTriples()
+2015.03.24 23:05:38.334 CST INFO: Postprocess: Process entities with incorrect Java type (0 entities) ...  -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 23:05:38.335 CST INFO: 0 ms
+ -- TriplePostProcessor.processFramesWithWrongJavaType()
+2015.03.24 23:05:38.335 CST INFO: Postprocess: Process metaclasses (3 metaclasses) ...  -- TriplePostProcessor.processMetaclasses()
+2015.03.24 23:05:38.335 CST INFO: 0 ms
+ -- TriplePostProcessor.processMetaclasses()
+2015.03.24 23:05:38.336 CST INFO: Postprocess: Process subclasses of rdf:List (1 classes) ...  -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 23:05:38.336 CST INFO: 0 ms
+ -- TriplePostProcessor.processSubclassesOfRdfList()
+2015.03.24 23:05:38.339 CST INFO: Postprocess: Instances with multiple types (0 instances) ...  -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 23:05:38.339 CST INFO: 0 ms
+ -- TriplePostProcessor.processInstancesWithMultipleTypes()
+2015.03.24 23:05:38.339 CST INFO: Postprocess: Add inferred superclasses ...  -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 23:05:38.340 CST INFO: 0 ms
+ -- TriplePostProcessor.processInferredSuperclasses()
+2015.03.24 23:05:38.342 CST INFO: Postprocess: Process orphan classes (0 classes) ...  -- TriplePostProcessor.processOrphanClses()
+2015.03.24 23:05:38.342 CST INFO: 0 ms
+ -- TriplePostProcessor.processOrphanClses()
+2015.03.24 23:05:38.342 CST INFO: Postprocess: Generalized Concept Inclusion (0 axioms) ...  -- TriplePostProcessor.processGeneralizedConceptInclusions()
+2015.03.24 23:05:38.344 CST INFO: 1 ms
+ -- TriplePostProcessor.processGeneralizedConceptInclusions()
+2015.03.24 23:05:38.344 CST INFO: Postprocess: Abstract classes...  -- TriplePostProcessor.processAbstractClasses()
+2015.03.24 23:05:38.344 CST INFO: 0 ms
+ -- TriplePostProcessor.processAbstractClasses()
+2015.03.24 23:05:38.344 CST INFO: Postprocess: Domain and range of properties...  -- TriplePostProcessor.processDomainAndRange()
+2015.03.24 23:05:38.345 CST INFO: 0 ms
+ -- TriplePostProcessor.processDomainAndRange()
+2015.03.24 23:05:38.345 CST INFO: Postprocess: Possibly typed entities (0 resources) ...  -- TriplePostProcessor.processPossiblyTypedResources()
+2015.03.24 23:05:38.345 CST INFO: 0 ms
+ -- TriplePostProcessor.processPossiblyTypedResources()
+2015.03.24 23:05:38.346 CST INFO: Updating underlying frames model in 0 ms -- ProtegeOWLParser.doFinalPostProcessing()
