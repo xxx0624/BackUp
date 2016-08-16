@@ -2,5 +2,6 @@
 *.jpg
 *.png
 *.zip
+*.class
 *.pyc
 .idea/

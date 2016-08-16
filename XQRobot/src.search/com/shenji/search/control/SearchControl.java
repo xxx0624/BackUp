@@ -275,6 +275,33 @@ public class SearchControl extends Search {
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
+		if(sentence.contains("7001")){
+			XQSearchBean tempAns = new XQSearchBean();
+			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
+					+ "遇到这种情况，重新插拔U棒，或者重新去网站上下载协卡助手的驱动，重新安装一下，安装的过程中，U棒不要插在电脑上。"
+					+ "（1）卸载原ca驱动：开始--程序--控制面板--添加或删除程序，卸载掉包含以下内容的： 证书管理器（或证书助手）；"
+					+ "明华（明华USB驱动、mingwah、m&w ekey driver)；华大（华大智能USB驱动、cidc)；握奇（握奇USB驱动、watch)；"
+					+ "文鼎创（uniagent）协卡助手；一证通证书升级客户端。"
+					+ "（2）CA驱动下载：登录http://62111929.net--下载 协卡助手，下载安装时U棒不能插在电脑上，"
+					+ "安装前在控制面板中把原来的驱动卸载。");
+			tempAns.setQuestion("7001 报错的错误详情");
+			tempAns.setScore(res.get(0).getScore());
+			tempAns.setSimilarity(res.get(0).getSimilarity());
+			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
+			res = new ArrayList<XQSearchBean>();
+			res.add(tempAns);
+		}
+		else if(sentence.contains("8001")){
+			XQSearchBean tempAns = new XQSearchBean();
+			tempAns.setAnswer("点击【错误详情】，查看具体错误。8001是与您在网站登记情况相关，主要集中未开户或者序列号变更有关。"
+					+ "遇到这种情况的话，请联系您的电子报税服务商，由他们为您在网站端进行开户、修改CA或者查询。");
+			tempAns.setQuestion("8001 报错的错误详情");
+			tempAns.setScore(res.get(0).getScore());
+			tempAns.setSimilarity(res.get(0).getSimilarity());
+			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
+			res = new ArrayList<XQSearchBean>();
+			res.add(tempAns);
+		}
 		System.out.println("现匹配条数" + res.size());
 		return res;
 	}
