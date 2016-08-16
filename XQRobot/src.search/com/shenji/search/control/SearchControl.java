@@ -182,6 +182,18 @@ public class SearchControl extends Search {
 				classifyTag = -1;
 		}
 		classifyTag = 7;
+		//special case
+		String[] errorCodeList = { "3001", "5001", "6001", "7001", "8001", "9001"};
+		int errorIndex = -1;
+		for(int i = 0; i < errorCodeList.length; i ++){
+			if(sentence.contains(errorCodeList[i])){
+				errorIndex = i;
+				break;
+			}
+		}
+		if(errorIndex!=-1){
+			sentence = errorCodeList[errorIndex]+"报错";
+		}
 		if (classifyTag != -1) {
 			if (classifyTag == 1) {
 				res = (List<XQSearchBean>) super.search(sentence,
@@ -254,14 +266,14 @@ public class SearchControl extends Search {
 			cntBean++;
 		}
 		if(noAnswerFlag==true && res.size()>0){
-			XQSearchBean ttttBean = new XQSearchBean();
-			ttttBean.setAnswer("由于新系统启用，新的知识库在完善扩展中，您的问题我们已经记录下来，该问题请关注神计报税公众号中相关解答.");
-			ttttBean.setQuestion("");
-			ttttBean.setScore(res.get(0).getScore());
-			ttttBean.setSimilarity(res.get(0).getSimilarity());
-			ttttBean.setHtmlContent(res.get(0).getHtmlContent());	
+			XQSearchBean tempAns = new XQSearchBean();
+			tempAns.setAnswer("由于新系统启用，新的知识库在完善扩展中，您的问题我们已经记录下来，该问题请关注神计报税公众号中相关解答.");
+			tempAns.setQuestion("");
+			tempAns.setScore(res.get(0).getScore());
+			tempAns.setSimilarity(res.get(0).getSimilarity());
+			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
 			res = new ArrayList<XQSearchBean>();
-			res.add(ttttBean);
+			res.add(tempAns);
 		}
 		System.out.println("现匹配条数" + res.size());
 		return res;
