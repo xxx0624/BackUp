@@ -302,6 +302,9 @@ public class SearchControl extends Search {
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
+		else if(sentence.contains("4001")){
+			res = new ArrayList<XQSearchBean>();
+		}
 		System.out.println("现匹配条数" + res.size());
 		return res;
 	}
