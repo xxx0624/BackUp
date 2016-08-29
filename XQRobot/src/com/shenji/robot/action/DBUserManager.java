@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
 import com.shenji.common.util.MD5Util;
+import com.shenji.web.bean.QALogBean;
 import com.shenji.web.bean.UserBean;
 
 public class DBUserManager {
@@ -123,8 +124,46 @@ public class DBUserManager {
 
 		return -1;
 	}
+	
+	public int insertQA(QALogBean bean){
+		String sql = "insert into qa_log(question, robot_question, robot_answer, sort_num, score, qa_type)"
+				+ " values(?,?,?,?,?,?)";
+		PreparedStatement preparedStatement = null;
+		try {
+			preparedStatement = this.connection.prepareStatement(sql);
+			preparedStatement.setString(1, bean.getUserQuestion());
+			preparedStatement.setString(2, bean.getRobotQuestion());
+			preparedStatement.setString(3, bean.getRobotAnswer());
+			preparedStatement.setInt(4, bean.getSortNum());
+			preparedStatement.setString(5, bean.getScore());
+			preparedStatement.setInt(6, bean.getQaType());
+			int row = preparedStatement.executeUpdate();
+			if (row > 0) {
+				return 1;
+			}
+		} catch (SQLException e) {
+			Log.getLogger(this.getClass()).error(e.getMessage(),e);
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} catch (SQLException e) {
+				Log.getLogger(this.getClass()).error(e.getMessage(),e);
+			}
+		}
+		return -1;
+	}
 
 	public static void main(String[] str) throws ConnectionPoolException {
-		System.out.println(new DBUserManager().login("1", "1"));
+		//System.out.println(new DBUserManager().login("1", "1"));
+		QALogBean bean = new QALogBean();
+		bean.setUserQuestion("哈哈哈哈好的 123 abc@#");
+		bean.setRobotQuestion("哈哈哈哈你猜税务123abc");
+		bean.setRobotAnswer("哈哈哈哈你猜税务123abc");
+		bean.setSortNum(0);
+		bean.setScore("1.0");
+		bean.setQaType(5);
+		int success = new DBUserManager().insertQA(bean);
+		System.out.println(success);
 	}
 }

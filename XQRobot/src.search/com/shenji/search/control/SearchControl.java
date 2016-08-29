@@ -15,6 +15,7 @@ import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
 import com.shenji.common.util.HttpUtils;
+import com.shenji.robot.action.DBUserManager;
 import com.shenji.robot.data.ResultShowBean;
 import com.shenji.robot.exception.OntoReasonerException;
 import com.shenji.robot.exception.OntoReasonerException.ErrorCode;
@@ -35,6 +36,7 @@ import com.shenji.search.core.exception.SearchException;
 import com.shenji.search.core.inter.ISearchFolder;
 import com.shenji.search.core.search.AbsBooleanSearch;
 import com.shenji.search.core.search.Search;
+import com.shenji.web.bean.QALogBean;
 
 public class SearchControl extends Search {
 	private boolean pretreatmentResult = false;
@@ -306,6 +308,28 @@ public class SearchControl extends Search {
 			res = new ArrayList<XQSearchBean>();
 		}
 		System.out.println("现匹配条数" + res.size());
+		//add qa log
+		try {
+			DBUserManager dbUserManager = new DBUserManager();
+			int sortNum = 0;
+			//to be confirmed
+			int qaType = 1;
+			for(Iterator<XQSearchBean> iterator = res.iterator(); iterator.hasNext(); ){
+				XQSearchBean xqSearchBean = iterator.next();
+				String robotQuestion = xqSearchBean.getQuestion();
+				String robotAnswer = xqSearchBean.getAnswer();
+				String score = String.valueOf(xqSearchBean.getScore());
+				QALogBean bean = new QALogBean(sentence, robotQuestion, robotAnswer, sortNum, score, qaType);
+				dbUserManager.insertQA(bean);
+				sortNum += 1;
+				if(sortNum >= 3){
+					break;
+				}
+			}
+		} catch (ConnectionPoolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return res;
 	}
 
@@ -801,11 +825,10 @@ public class SearchControl extends Search {
 				return resultShowBean;
 			} else {
 				String[] answerList = {
-						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问的时候一定要加上疑问词(如:为什么,怎么办...)才能得到新答案哟！",
-						"您好，小琼机器人不理解您的问题，请您重新提一定要带有疑问词(如:为什么,怎么办...)的问题吧~~~谢谢您的合作",
-						"不好意思，您的问题我不理解，请您重新提问吧，提问的时候请一定要加上适当的疑问词(如:为什么,怎么办...)才能得到您想要的答案哟！",
-						"亲，小琼机器人没有理解您的意思，请您重新提一定要带有疑问词(如:为什么,怎么办...)的问题吧~~~",
-						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧，注意提问的时候请一定要加上适当的疑问词(如:为什么,怎么办...)才能得到您想要的答案哟！" };
+						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
+						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
+						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~",
+						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！" };
 				code = ResultCode.Tips;
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10))
