@@ -124,12 +124,12 @@ public class Search {
 					SearchException.ErrorCode.NoSearchResult)) {
 				return new String[] {
 						String.valueOf(ResultCode.NoSearchResult.value()),
-						"无法找到答案！" };
+						"抱歉，暂未找到答案！" };
 			} else
 				Log.getLogger(this.getClass()).fatal("出大事了，搜索奔溃了！赶紧重启!", e);
 			return new String[] {
 					String.valueOf(ResultCode.SystemError.value()),
-					"系统发生错误！请联系管理员!" };
+					"抱歉，系统故障，暂未找到答案！" };
 
 		}
 		reStrs = this.getArraryByResultShowBean(bean);

@@ -7,9 +7,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+//import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+
 
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
@@ -30,15 +35,22 @@ import com.shenji.search.action.SimilarityComparator;
 import com.shenji.search.bean.XQSearchBean;
 import com.shenji.search.control.IEnumSearch.ResultCode;
 import com.shenji.search.core.bean.ESearchRelation;
+import com.shenji.search.core.bean.SearchBean;
 import com.shenji.search.core.control.Fenci;
 import com.shenji.search.core.exception.EngineException;
 import com.shenji.search.core.exception.SearchException;
 import com.shenji.search.core.inter.ISearchFolder;
 import com.shenji.search.core.search.AbsBooleanSearch;
 import com.shenji.search.core.search.Search;
+import com.shenji.search.core.search.SearchThread;
+import com.shenji.search.threadTool.InsertLogExecutorPool;
+import com.shenji.search.threadTool.InsertThread;
 import com.shenji.web.bean.QALogBean;
 
 public class SearchControl extends Search {
+	
+	private static ExecutorService insertLogPool;
+	
 	private boolean pretreatmentResult = false;
 
 	// 判断用户的意图，声明7种搜索所可能包含的关键词
@@ -58,6 +70,9 @@ public class SearchControl extends Search {
 
 	public SearchControl() {
 		super();
+		if(insertLogPool == null || insertLogPool.isTerminated()){
+			insertLogPool =  InsertLogExecutorPool.createInsertLogExecutorPool();
+		}
 	}
 
 	/*
@@ -309,27 +324,8 @@ public class SearchControl extends Search {
 		}
 		System.out.println("现匹配条数" + res.size());
 		//add qa log
-		try {
-			DBUserManager dbUserManager = new DBUserManager();
-			int sortNum = 0;
-			//to be confirmed
-			int qaType = 1;
-			for(Iterator<XQSearchBean> iterator = res.iterator(); iterator.hasNext(); ){
-				XQSearchBean xqSearchBean = iterator.next();
-				String robotQuestion = xqSearchBean.getQuestion();
-				String robotAnswer = xqSearchBean.getAnswer();
-				String score = String.valueOf(xqSearchBean.getScore());
-				QALogBean bean = new QALogBean(sentence, robotQuestion, robotAnswer, sortNum, score, qaType);
-				dbUserManager.insertQA(bean);
-				sortNum += 1;
-				if(sortNum >= 3){
-					break;
-				}
-			}
-		} catch (ConnectionPoolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Callable<List<? extends XQSearchBean>> c = new InsertThread(sentence,res);
+		insertLogPool.submit(c);
 		return res;
 	}
 

@@ -126,8 +126,8 @@ public class DBUserManager {
 	}
 	
 	public int insertQA(QALogBean bean){
-		String sql = "insert into qa_log(question, robot_question, robot_answer, sort_num, score, qa_type)"
-				+ " values(?,?,?,?,?,?)";
+		String sql = "insert into qa_log(question, robot_question, robot_answer, sort_num, score, qa_type, log_id)"
+				+ " values(?,?,?,?,?,?,?)";
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = this.connection.prepareStatement(sql);
@@ -137,6 +137,7 @@ public class DBUserManager {
 			preparedStatement.setInt(4, bean.getSortNum());
 			preparedStatement.setString(5, bean.getScore());
 			preparedStatement.setInt(6, bean.getQaType());
+			preparedStatement.setString(7, bean.getLogId());
 			int row = preparedStatement.executeUpdate();
 			if (row > 0) {
 				return 1;

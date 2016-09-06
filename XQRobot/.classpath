@@ -76,5 +76,12 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-3.0.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dwr.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-aop-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-beans-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-context-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-core-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-jdbc-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-web-4.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring-webmvc-4.2.2.RELEASE.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

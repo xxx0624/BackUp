@@ -14,6 +14,16 @@ public class QALogBean {
 	private String score;
 	
 	private int qaType;
+	
+	private String logId;
+
+	public String getLogId() {
+		return logId;
+	}
+
+	public void setLogId(String logId) {
+		this.logId = logId;
+	}
 
 	public int getId() {
 		return id;
@@ -83,13 +93,15 @@ public class QALogBean {
 	}
 	
 	public QALogBean(String userQuestion, String robotQuestion,
-			String robotAnswer, int sortNum, String score, int qaType) {
+			String robotAnswer, int sortNum, String score, int qaType,
+			String logId) {
 		this.userQuestion = userQuestion;
 		this.robotQuestion = robotQuestion;
 		this.robotAnswer = robotAnswer;
 		this.sortNum = sortNum;
 		this.score = score;
 		this.qaType = qaType;
+		this.logId = logId;
 	}
 	
 	public QALogBean(){
