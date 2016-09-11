@@ -26,7 +26,7 @@ public class InsertThread implements Callable<List<? extends XQSearchBean>> {
 		DBUserManager dbUserManager = new DBUserManager();
 		int sortNum = 0;
 		int qaType = 1;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
 		String logIdString = sdf.format(new Date());
 		for(Iterator<XQSearchBean> iterator = beans.iterator(); iterator.hasNext(); ){
 			XQSearchBean xqSearchBean = iterator.next();

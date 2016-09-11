@@ -1,6 +1,5 @@
 package com.shenji.search.threadTool;
 
-//import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,13 +20,6 @@ public class InsertLogExecutorPool {
 	private static int queueCapacity = 500;
 	
 	public static ExecutorService createInsertLogExecutorPool(){
-		/*ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setQueueCapacity(queueCapacity);
-		threadPoolTaskExecutor.setCorePoolSize(corePoolSize);
-		threadPoolTaskExecutor.setMaxPoolSize(maxPoolSize);
-		threadPoolTaskExecutor.setKeepAliveSeconds(30000);
-		threadPoolTaskExecutor.initialize();
-		return threadPoolTaskExecutor;*/
 		ExecutorService pool = new ThreadPoolExecutor(corePoolSize,
 						maxPoolSize, 0L, TimeUnit.MILLISECONDS,
 						new LinkedBlockingQueue<Runnable>()) {

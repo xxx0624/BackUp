@@ -266,11 +266,11 @@ public class SearchControl extends Search {
 				noAnswerFlag = false;
 			}
 			if (cntBean < print_cnt) {
-				System.out.println("current print No:" + cntBean);
+				/*System.out.println("current print No:" + cntBean);
 				System.out.println("score:" + cur.getScore());
 				System.out.println("uri:" + cur.getUri());
 				System.out.println("question:" + cur.getQuestion());
-				System.out.println("answer:" + cur.getAnswer());
+				System.out.println("answer:" + cur.getAnswer());*/
 			}
 			if (cntBean == 0 && oneAnswerFlag == false
 					&& cur.getScore() > up_score) {

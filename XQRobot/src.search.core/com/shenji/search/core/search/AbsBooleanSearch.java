@@ -2,10 +2,13 @@ package com.shenji.search.core.search;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -23,6 +26,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import com.shenji.common.log.Log;
+import com.shenji.search.bean.WordLogBean;
+import com.shenji.search.bean.XQSearchBean;
 import com.shenji.search.control.Parameters;
 import com.shenji.search.core.bean.ESearchRelation;
 import com.shenji.search.core.bean.SearchBean;
@@ -32,12 +37,17 @@ import com.shenji.search.core.dic.CustomSynonymDic;
 import com.shenji.search.core.engine.SynonymEngine;
 import com.shenji.search.core.exception.EngineException;
 import com.shenji.search.core.exception.SearchException;
+import com.shenji.search.threadTool.InsertThread;
+import com.shenji.search.threadTool.InsertWordLogExecutorPool;
+import com.shenji.search.threadTool.InsertWordThread;
 
 public abstract class AbsBooleanSearch {
 	protected SearchParamsBean paramsBean = null;
 	protected SynonymEngine engine_Custom = null;
 	protected SynonymEngine engine_Common = null;
 	private ESearchRelation relation;
+	
+	private static ExecutorService insertWordLogPool;
 
 	public AbsBooleanSearch() {
 		try {
@@ -45,6 +55,10 @@ public abstract class AbsBooleanSearch {
 			this.engine_Custom = new CustomSynonymDic();
 			// 哈工大词林同义词引擎
 			this.engine_Common = new CommonSynonymDic();
+			//init thread pool
+			if(insertWordLogPool == null || insertWordLogPool.isTerminated()){
+				insertWordLogPool =  InsertWordLogExecutorPool.createInsertWordLogExecutorPool();
+			}
 		} catch (EngineException e) {
 			// TODO Auto-generated catch block
 			Log.getLogger(this.getClass()).error(e.getMessage(), e);
@@ -113,10 +127,13 @@ public abstract class AbsBooleanSearch {
 			BooleanQuery booleanQuery = new BooleanQuery();
 			Iterator<String> iterator = paramsBean.getQueryFiledArray()
 					.iterator();
+			List<WordLogBean> wordLogs = new ArrayList<>();
 			while (iterator.hasNext()) {
 				float weight = 1;
 				String filedValue = iterator.next();
 				weight = this.getCustomWeight(filedValue);
+				//System.out.println("text:" + filedValue + "; value:" + String.valueOf(weight));
+				wordLogs.add(new WordLogBean(filedValue, String.valueOf(weight)));
 				List<Query> queries = getQueriese(filedValue, weight);
 				Occur occur = null;
 				if (relation == ESearchRelation.AND_SEARCH) {
@@ -130,6 +147,9 @@ public abstract class AbsBooleanSearch {
 				if (queries != null)
 					queries.clear();
 			}
+			//add qa word log
+			Callable<List<WordLogBean>> c = new InsertWordThread(paramsBean.getSentence(), wordLogs);
+			insertWordLogPool.submit(c);
 			TopDocs topDocs = searcher.search(booleanQuery,
 					Parameters.maxResult);
 			ScoreDoc[] docs = topDocs.scoreDocs;
