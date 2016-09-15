@@ -16,6 +16,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -26,10 +27,12 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import com.shenji.common.log.Log;
-import com.shenji.search.bean.WordLogBean;
+import com.shenji.search.bean.WordBoostLogBean;
+import com.shenji.search.bean.WordScoreLogBean;
 import com.shenji.search.bean.XQSearchBean;
 import com.shenji.search.control.Parameters;
 import com.shenji.search.core.bean.ESearchRelation;
+import com.shenji.search.core.bean.ExplainBean;
 import com.shenji.search.core.bean.SearchBean;
 import com.shenji.search.core.bean.SearchParamsBean;
 import com.shenji.search.core.dic.CommonSynonymDic;
@@ -127,13 +130,13 @@ public abstract class AbsBooleanSearch {
 			BooleanQuery booleanQuery = new BooleanQuery();
 			Iterator<String> iterator = paramsBean.getQueryFiledArray()
 					.iterator();
-			List<WordLogBean> wordLogs = new ArrayList<>();
+			List<WordBoostLogBean> wordBoostLogs = new ArrayList<>();
 			while (iterator.hasNext()) {
 				float weight = 1;
 				String filedValue = iterator.next();
 				weight = this.getCustomWeight(filedValue);
 				//System.out.println("text:" + filedValue + "; value:" + String.valueOf(weight));
-				wordLogs.add(new WordLogBean(filedValue, String.valueOf(weight)));
+				wordBoostLogs.add(new WordBoostLogBean(filedValue, String.valueOf(weight)));
 				List<Query> queries = getQueriese(filedValue, weight);
 				Occur occur = null;
 				if (relation == ESearchRelation.AND_SEARCH) {
@@ -147,16 +150,24 @@ public abstract class AbsBooleanSearch {
 				if (queries != null)
 					queries.clear();
 			}
-			//add qa word log
-			Callable<List<WordLogBean>> c = new InsertWordThread(paramsBean.getSentence(), wordLogs);
-			insertWordLogPool.submit(c);
-			TopDocs topDocs = searcher.search(booleanQuery,
-					Parameters.maxResult);
+			//add qa word boost log
+			Callable<List<WordBoostLogBean>> c1 = new InsertWordThread(paramsBean.getSentence(), wordBoostLogs, null);
+			insertWordLogPool.submit(c1);
+			TopDocs topDocs = searcher.search(booleanQuery, Parameters.maxResult);
 			ScoreDoc[] docs = topDocs.scoreDocs;
 			// 构造查询结果集
 			Map<Document, Float> map = new LinkedHashMap<Document, Float>();
+			int cnt = 0;
 			for (ScoreDoc doc : docs) {
 				map.put(searcher.doc(doc.doc), doc.score);
+				//add qa word score log
+				if(cnt <= 2){
+					Explanation explanation = searcher.explain(booleanQuery, doc.doc);
+					List<WordScoreLogBean> wordScoreLogBeans = analyseExplanation(explanation, cnt);
+					Callable<List<WordBoostLogBean>> c2 = new InsertWordThread(paramsBean.getSentence(), null, wordScoreLogBeans);
+					insertWordLogPool.submit(c2);
+					cnt += 1;
+				}
 			}
 			Log.getLogger(this.getClass()).info("共找到：" + topDocs.totalHits);
 			return map;
@@ -189,6 +200,28 @@ public abstract class AbsBooleanSearch {
 		Query query = new TermQuery(term);
 		query.setBoost(weight);
 		return query;
+	}
+	
+	private List<WordScoreLogBean> analyseExplanation(Explanation explanation, int sort_num){
+		List<WordScoreLogBean> wordScoreLogBeans = new ArrayList<>();
+		//System.out.println("Description:" + explanation.getDescription());
+		//System.out.println("Value:" + explanation.getValue());
+		for(int i = 0; i < explanation.getDetails().length; i ++){
+			//System.out.println("	description("+ i +"):" + explanation.getDetails()[i].getDescription());
+			//System.out.println("	value("+ i +"):" + explanation.getDetails()[i].getValue());
+			if(explanation.getDetails()[i].getDetails() != null){
+				for(int j = 0; j < explanation.getDetails()[i].getDetails().length; j ++){
+					wordScoreLogBeans.add(new WordScoreLogBean(
+							explanation.getDetails()[i].getDetails()[j].getDescription(), 
+							String.valueOf(explanation.getDetails()[i].getDetails()[j].getValue()), 
+							sort_num)
+							);
+					//System.out.println("		description("+ i +")("+ j +"):" +  explanation.getDetails()[i].getDetails()[j].getDescription());
+					//System.out.println("		value("+ i +")("+ j +"):" + explanation.getDetails()[i].getDetails()[j].getValue());
+				}
+			}
+		}
+		return wordScoreLogBeans;
 	}
 
 }

@@ -41,8 +41,7 @@ public class Search {
 			for (int i = 0; i < searchFolder.length; i++) {
 				// 新建线程
 				paramsBean.setFromFolder(searchFolder[i]);
-				Callable<List<? extends SearchBean>> c = new SearchThread(
-						paramsBean,booleanSearch);
+				Callable<List<? extends SearchBean>> c = new SearchThread(paramsBean,booleanSearch);
 				// 提交带返回值的线程给线程池
 				Future<List<? extends SearchBean>> f = pool.submit(c);
 				list.add(f);
@@ -52,8 +51,7 @@ public class Search {
 				List<? extends SearchBean> subList = f.get();
 				// 普通打分排序
 				if (subList != null && subList.size() > 0) {
-					Collections
-							.sort(subList, new ScoreComparator<SearchBean>());
+					Collections.sort(subList, new ScoreComparator<SearchBean>());
 					result.addAll(subList);
 				}
 			}

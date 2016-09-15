@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
 import com.shenji.common.util.MD5Util;
-import com.shenji.search.bean.WordLogBean;
+import com.shenji.search.bean.WordBoostLogBean;
+import com.shenji.search.bean.WordScoreLogBean;
 import com.shenji.web.bean.QALogBean;
 import com.shenji.web.bean.UserBean;
 
@@ -156,7 +157,7 @@ public class DBUserManager {
 		return -1;
 	}
 	
-	public int insertQALogWordScore(WordLogBean bean){
+	public int insertQALogWordBoostLog(WordBoostLogBean bean){
 		String sql = "insert into qa_boost_log(user_question, add_time, user_question_word, user_question_score)"
 				+ " values(?,?,?,?)";
 		PreparedStatement preparedStatement = null;
@@ -166,6 +167,34 @@ public class DBUserManager {
 			preparedStatement.setString(2, bean.getAdd_time());
 			preparedStatement.setString(3, bean.getUser_question_word());
 			preparedStatement.setString(4, bean.getUser_question_score());
+			int row = preparedStatement.executeUpdate();
+			if (row > 0) {
+				return 1;
+			}
+		} catch (SQLException e) {
+			Log.getLogger(this.getClass()).error(e.getMessage(),e);
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} catch (SQLException e) {
+				Log.getLogger(this.getClass()).error(e.getMessage(),e);
+			}
+		}
+		return -1;
+	}
+	
+	public int insertQALogWordScoreLog(WordScoreLogBean bean){
+		String sql = "insert into qa_score_log(user_question, add_time, user_question_word, user_question_score, sort_num)"
+				+ " values(?,?,?,?,?)";
+		PreparedStatement preparedStatement = null;
+		try {
+			preparedStatement = this.connection.prepareStatement(sql);
+			preparedStatement.setString(1, bean.getUser_question());
+			preparedStatement.setString(2, bean.getAdd_time());
+			preparedStatement.setString(3, bean.getUser_question_word());
+			preparedStatement.setString(4, bean.getUser_question_score());
+			preparedStatement.setInt(5, bean.getSort_num());
 			int row = preparedStatement.executeUpdate();
 			if (row > 0) {
 				return 1;
