@@ -357,39 +357,6 @@ public class SearchControl extends Search {
 		return false;
 	}
 
-	/*
-	 * private List<XQSearchBean> search(String args,
-	 * IEnumSearch.SearchRelationType rType) throws XQSearchProcessException {
-	 * // 新建线程池 // ExecutorService pool = //
-	 * Executors.newFixedThreadPool(Common.searchDir.length);//重写线程池异常处理
-	 * ExecutorService pool = this
-	 * .getExcutorService(Configuration.searchDir.length); // 存放带返回值的线程列表
-	 * List<Future<List<XQSearchBean>>> list = new
-	 * ArrayList<Future<List<XQSearchBean>>>(); // 存放查询结果的结果集 List<XQSearchBean>
-	 * result = new ArrayList<XQSearchBean>(); // 开启Common.searchDir.length个线程
-	 * try { for (int i = 0; i < Configuration.searchDir.length; i++) { // 新建线程
-	 * Callable<List<XQSearchBean>> c = new SearchThread(args,
-	 * Configuration.searchDir[i], rType);
-	 * 
-	 * // 提交带返回值的线程给线程池 Future<List<XQSearchBean>> f = pool.submit(c);
-	 * list.add(f); } for (Future<List<XQSearchBean>> f : list) { //
-	 * 阻塞方法，得到线程中的结果 List<XQSearchBean> subList = f.get(); // 普通打分排序 if (subList
-	 * != null && subList.size() > 0) { Collections.sort(subList, new
-	 * ScoreComparator<XQSearchBean>()); result.addAll(subList); } //
-	 * 讲该线程查询结果添加到结果集中
-	 * 
-	 * } // 关闭线程池 pool.shutdown(); return result; } catch (ExecutionException e)
-	 * { // 判断ExecutionException包装的异常是否为自定义异常 if (e.getCause() instanceof
-	 * XQSearchProcessException) {// 自定义的异常 throw ((XQSearchProcessException)
-	 * e.getCause()); } else {// 其他可能出现的异常 throw new
-	 * XQSearchProcessException("Unknow Error in Search!", e.getCause(),
-	 * XQSearchProcessException.ErrorCode.UnKnowError); } } catch
-	 * (InterruptedException e) { // TODO Auto-generated catch block throw new
-	 * XQSearchProcessException(
-	 * "Unknow Error in Search by interRuptedException!", e.getCause(),
-	 * XQSearchProcessException.ErrorCode.UnKnowError); } // return result; }
-	 */
-
 	public String searchBasic(String sentence, ESearchRelation relation)
 			throws SearchException {
 		List<XQSearchBean> beans = this.search(sentence, relation);
@@ -398,7 +365,7 @@ public class SearchControl extends Search {
 		return html;
 	}
 
-	public String searchBasicByxxx0624(String sentence, ESearchRelation relation)
+	public String searchBasicWithoutLink(String sentence, ESearchRelation relation)
 			throws SearchException {
 		List<XQSearchBean> beans = this.search(sentence, relation);
 		if (beans.size() <= 0) {

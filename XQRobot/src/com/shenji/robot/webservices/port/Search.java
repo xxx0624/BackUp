@@ -176,8 +176,9 @@ public class Search {
 			case Basics:// 基础查询
 				reStr = new SearchControl().searchBasic(args, rType);
 				break;
-			case BasicsByxxx0624://by xxx0624
-				reStr = new SearchControl().searchBasicByxxx0624(args, rType);
+			//todo
+			case BasicsWithoutLink://the result without link
+				reStr = new SearchControl().searchBasicWithoutLink(args, rType);
 				break;
 			case Ordinary:// 标准查询
 				reStr = new SearchControl().searchOrdinary(args, rType);
@@ -189,8 +190,7 @@ public class Search {
 							.searchFilterByOnto(
 									args,
 									rType,
-									ReasonerFactory
-											.createReasoner(ReasonerFactory.AUTOCOMPLEX),
+									ReasonerFactory.createReasoner(ReasonerFactory.AUTOCOMPLEX),
 									new OntoDimensionComparator());
 					break;
 				} catch (OntoReasonerException e) {

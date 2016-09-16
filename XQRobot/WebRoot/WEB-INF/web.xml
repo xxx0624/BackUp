@@ -36,10 +36,10 @@
 		<load-on-startup>5</load-on-startup>
 	</servlet>
 
-	<!-- SearchServletByxxx0624 -->
+	<!-- SearchServlet and the result without link -->
 	<servlet>
 		<servlet-name>SearchServletByxxx0624</servlet-name>
-		<servlet-class>com.shenji.web.servlet.SearchServletByxxx0624</servlet-class>
+		<servlet-class>com.shenji.web.servlet.SearchServletWithoutLink</servlet-class>
 	</servlet>
 
 	<!-- dwr t配置 -->

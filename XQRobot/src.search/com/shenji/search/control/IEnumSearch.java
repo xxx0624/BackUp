@@ -3,8 +3,7 @@ package com.shenji.search.control;
 public class IEnumSearch {
 
 	public static enum SearchConditionType {
-		Basics(1), Ordinary(2), FilterByOnto(3), Interaction(4), BasicsByxxx0624(
-				10);
+		Basics(1), Ordinary(2), FilterByOnto(3), Interaction(4), BasicsWithoutLink(10);
 		private int value;
 
 		private SearchConditionType(int value) {
