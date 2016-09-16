@@ -39,12 +39,6 @@ public class DividingLineServer {
 	 * @param list
 	 * @return
 	 */
-	/*
-	 * public List<SearchBean> customSort(List<SearchBean> list) {
-	 * StrategeFactory factory = new StrategeFactory(StrategeFactory.COSTOM,
-	 * list, matchList, maxMatchSet); return factory.getSortList(); }
-	 */
-
 	public static String simpleSort(List<? extends XQSearchBean> list) {
 		int len = list.size() > Parameters.maxResult ? Parameters.maxResult
 				: list.size();
@@ -59,6 +53,60 @@ public class DividingLineServer {
 		}
 		html.append("</body></html>");
 		return html.toString();
+	}
+	
+	/**
+	 * 排序
+	 * html结果无a标签
+	 * @param list
+	 * @return
+	 */
+	public static String simpleSortWithoutLink(List<? extends XQSearchBean> list) {
+		int len = list.size() > Parameters.maxResult ? Parameters.maxResult
+				: list.size();
+		StringBuilder html = new StringBuilder(
+				"<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><head><title>Search</title>");
+		html.append("<style>em{font-style:normal;color:#cc0000}</style></head><body>");
+		if (len == 0)
+			html.append("<div>无法找到答案！</div>");
+		for (int j = 0; j < list.size(); j++) {
+			XQSearchBean bean = list.get(j);
+			html.append("<div>" 
+						+ "<div>"
+						+ getQuestion(bean.getHtmlContent())
+						+ "</div><div>"
+						+ getAnswer(bean.getHtmlContent())
+						+ "<div>"
+						+ "</div><br>");
+		}
+		html.append("</body></html>");
+		return html.toString();
+	}
+	private static String getQuestion(String htmlContent){
+		StringBuilder sb = new StringBuilder();
+		int L1 = htmlContent.indexOf("\"question\">");
+		if(L1 > 0){
+			L1 = L1 + 11;
+			int L2 = htmlContent.indexOf("</div>", L1);
+			if(L2 > L1){
+				sb.append(htmlContent.substring(L1, L2));
+				return sb.toString();
+			}
+		}
+		return "";
+	}
+	private static String getAnswer(String htmlContent){
+		StringBuilder sb = new StringBuilder();
+		int L1 = htmlContent.indexOf("\"answer\">");
+		if(L1 > 0){
+			L1 = L1 + 9;
+			int L2 = htmlContent.indexOf("</div>", L1);
+			if(L2 > L1){
+				sb.append(htmlContent.substring(L1, L2));
+				return sb.toString();
+			}
+		}
+		return "";
 	}
 
 	public static String cutlineSort(List<? extends XQSearchBean> list) {

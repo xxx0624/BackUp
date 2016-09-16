@@ -361,7 +361,7 @@ public class SearchControl extends Search {
 			throws SearchException {
 		List<XQSearchBean> beans = this.search(sentence, relation);
 		// 转化为普通HTML文档
-		String html = DividingLineServer.simpleSort(beans);
+		String html = DividingLineServer.simpleSortWithoutLink(beans);
 		return html;
 	}
 
