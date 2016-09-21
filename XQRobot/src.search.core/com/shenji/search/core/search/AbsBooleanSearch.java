@@ -163,6 +163,7 @@ public abstract class AbsBooleanSearch {
 				//add qa word score log
 				if(cnt <= 2){
 					Explanation explanation = searcher.explain(booleanQuery, doc.doc);
+					System.out.println(explanation.toString());
 					List<WordScoreLogBean> wordScoreLogBeans = analyseExplanation(explanation, cnt);
 					Callable<List<WordBoostLogBean>> c2 = new InsertWordThread(paramsBean.getSentence(), null, wordScoreLogBeans);
 					insertWordLogPool.submit(c2);

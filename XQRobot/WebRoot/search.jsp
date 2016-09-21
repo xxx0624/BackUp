@@ -118,7 +118,7 @@ a:visited {
 			<tr>
 				<td>
 					<p align="center">
-						<font color="#666666" size="2">&copy;2014&nbsp;Shenji&nbsp;<u>使用神计一下前必读</u>&nbsp;沪XXXXXX&nbsp;<img
+						<font color="#666666" size="2">&copy;2016&nbsp;Shenji&nbsp;<u>使用神计一下前必读</u>&nbsp;沪XXXXXX&nbsp;<img
 							src="http://www.baidu.com/cache/global/img/gs.gif" /> </font>
 					</p></td>
 			</tr>
