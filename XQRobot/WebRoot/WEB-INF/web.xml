@@ -38,7 +38,7 @@
 
 	<!-- SearchServlet and the result without link -->
 	<servlet>
-		<servlet-name>SearchServletByxxx0624</servlet-name>
+		<servlet-name>SearchServletWithoutLink</servlet-name>
 		<servlet-class>com.shenji.web.servlet.SearchServletWithoutLink</servlet-class>
 	</servlet>
 
@@ -94,8 +94,8 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>SearchServletByxxx0624</servlet-name>
-		<url-pattern>/SearchServletByxxx0624</url-pattern>
+		<servlet-name>SearchServletWithoutLink</servlet-name>
+		<url-pattern>/SearchServletWithoutLink</url-pattern>
 	</servlet-mapping>
 
 	<mime-mapping>

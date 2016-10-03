@@ -607,6 +607,7 @@ public class SearchControl extends Search {
 
 	}
 	
+	//not used
 	public String searchOrdinaryByxxx0624(String sentence, ESearchRelation relation)
 			throws SearchException {
 		// 预处理
@@ -779,14 +780,21 @@ public class SearchControl extends Search {
 			 * throw new SearchException("No search Result",
 			 * SearchException.ErrorCode.NoSearchResult);
 			 */
-			// xxx0624
-			if (judgeUserConversation(html) == false) {
+			// add some faq from mysql
+			if (judgeUserConversation(html) == 1) {
 				code = ResultCode.Tips;
-				reList.add("友情提示：");
+				reList.add("友情提示:");
 				reList.add(html);
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 				return resultShowBean;
-			} else {
+			} else if (judgeUserConversation(html) == 2){
+				code = ResultCode.Tips;
+				reList.add("友情提示:");
+				reList.add(html);
+				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+				return resultShowBean;
+			}
+			else {
 				String[] answerList = {
 						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
 						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
@@ -844,11 +852,13 @@ public class SearchControl extends Search {
 		return resultShowBean;
 	}
 
-	public boolean judgeUserConversation(String html) {
+	public int judgeUserConversation(String html) {
 		if (html.contains("html") && html.contains("div"))
-			return true;
+			return 1;
+		else if (html.contains("答:"))
+			return 2;
 		else
-			return false;
+			return 3;
 	}
 
 	private String[] copeOneHtml(String url) throws IOException {
