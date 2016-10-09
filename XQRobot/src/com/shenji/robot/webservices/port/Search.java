@@ -135,6 +135,15 @@ public class Search {
 		System.out.println("23333:"+reStrs.length);
 		return reStrs;
 	}
+	
+	/*
+	 * for test robot
+	 * */
+	public String[] testRobot(String args, int number, int relationType,
+			int conditionType) {
+		return new Search().searchNum_NoProxy(args, number, relationType,
+				conditionType);
+	}
 
 	private Object[] getSearchEnum(int relationType, int conditionType)
 			throws IllegalArgumentException {

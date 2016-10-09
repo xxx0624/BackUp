@@ -41,7 +41,13 @@
 		<servlet-name>SearchServletWithoutLink</servlet-name>
 		<servlet-class>com.shenji.web.servlet.SearchServletWithoutLink</servlet-class>
 	</servlet>
-
+	
+	<!-- test robot -->
+	<servlet>
+		<servlet-name>SearchServlet2_testRobot</servlet-name>
+		<servlet-class>com.shenji.web.servlet.SearchServletTestRobot</servlet-class>
+	</servlet>
+	
 	<!-- dwr t配置 -->
 	<servlet>
 		<servlet-name>dwr-test</servlet-name>
@@ -91,6 +97,11 @@
 	<servlet-mapping>
 		<servlet-name>SearchServlet2</servlet-name>
 		<url-pattern>/SearchServlet2</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SearchServlet2_testRobot</servlet-name>
+		<url-pattern>/SearchServlet2_testRobot</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
