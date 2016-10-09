@@ -762,8 +762,7 @@ public class SearchControl extends Search {
 			ESearchRelation relation, IComReasonerServer reasonerServer,
 			Comparator<? extends XQSearchBean> comparator)
 			throws SearchException, OntoReasonerException, SearchException {
-		String html = this.searchFilterByOnto(sentence, relation,
-				reasonerServer, comparator);
+		String html = this.searchFilterByOnto(sentence, relation, reasonerServer, comparator);
 		System.out.println("onto's html = " + html);
 		return this.convertHtmlToBean(html, number);
 	}
