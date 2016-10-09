@@ -688,10 +688,11 @@ public class SearchControl extends Search {
 
 	}
 
-	public String searchFilterByOnto(String sentence, ESearchRelation relation,
+	public String searchFilterByOnto(
+			String sentence, 
+			ESearchRelation relation,
 			IComReasonerServer reasonerServer,
-			Comparator<? extends XQSearchBean> comparator)
-			throws SearchException, OntoReasonerException {
+			Comparator<? extends XQSearchBean> comparator)throws SearchException, OntoReasonerException {
 		// 预处理
 		String str = pretreatment(sentence);
 		if (pretreatmentResult)
@@ -703,12 +704,10 @@ public class SearchControl extends Search {
 			try {
 				beans = search(sentence, relation);
 				basicSearchNum = beans.size();
-				exBeans = reasonerServer.reasoning(new Object[] { sentence,
-						beans });
+				exBeans = reasonerServer.reasoning(new Object[] { sentence, beans });
 				System.err.println(basicSearchNum + ":" + exBeans.size());
 				// 这段我加的是因为图谱定位错误，当普通搜索结果大于10个时，防止万一没有结果，这里就走普通搜索好了
-				if (exBeans != null & exBeans.size() == 0
-						&& basicSearchNum >= 10)
+				if (exBeans != null && exBeans.size() == 0 && basicSearchNum >= 10)
 					return aftertreatment(sentence, beans,
 							new SimilarityComparator<XQSearchBean>());
 				else
@@ -758,10 +757,12 @@ public class SearchControl extends Search {
 		return this.convertHtmlToBean(html, number);
 	}
 
-	public ResultShowBean searchFilterByOntoNum(String sentence, int number,
-			ESearchRelation relation, IComReasonerServer reasonerServer,
-			Comparator<? extends XQSearchBean> comparator)
-			throws SearchException, OntoReasonerException, SearchException {
+	public ResultShowBean searchFilterByOntoNum(
+			String sentence, 
+			int number,
+			ESearchRelation relation, 
+			IComReasonerServer reasonerServer,
+			Comparator<? extends XQSearchBean> comparator)throws SearchException, OntoReasonerException, SearchException {
 		String html = this.searchFilterByOnto(sentence, relation, reasonerServer, comparator);
 		System.out.println("onto's html = " + html);
 		return this.convertHtmlToBean(html, number);
@@ -798,11 +799,11 @@ public class SearchControl extends Search {
 						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
 						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
 						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~",
-						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！" };
+						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！"
+						};
 				code = ResultCode.Tips;
 				reList.add("友情提示：");
-				int randomAnswer = ((int) (Math.random() * 10))
-						% answerList.length;
+				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
 				System.out.println(randomAnswer);
 				reList.add(answerList[randomAnswer]);
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
