@@ -102,8 +102,7 @@ public class Search {
 									args,
 									number,
 									rType,
-									ReasonerFactory
-											.createReasoner(ReasonerFactory.AUTOCOMPLEX),
+									ReasonerFactory.createReasoner(ReasonerFactory.AUTOCOMPLEX),
 									new OntoDimensionComparator());
 					break;
 				} catch (OntoReasonerException e) {
