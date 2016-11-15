@@ -82,6 +82,7 @@ public class Search {
 		}
 		ESearchRelation rType = (ESearchRelation) searchEnums[0];
 		IEnumSearch.SearchConditionType cType = (IEnumSearch.SearchConditionType) searchEnums[1];
+		System.out.println("search web service (no proxy):");
 		try {
 			switch (cType) {
 			case Basics:// 基础查询
@@ -177,23 +178,27 @@ public class Search {
 		}
 		ESearchRelation rType = (ESearchRelation) searchEnums[0];
 		IEnumSearch.SearchConditionType cType = (IEnumSearch.SearchConditionType) searchEnums[1];
-
+		System.out.println("search web service(html):");
 		String reStr = null;
 		try {
 			switch (cType) {
 			case Basics:// 基础查询
+				System.out.println("基础查询");
 				reStr = new SearchControl().searchBasic(args, rType);
 				break;
 			//todo
 			case BasicsWithoutLink://the result without link
+				System.out.println("基础查询without link");
 				reStr = new SearchControl().searchBasicWithoutLink(args, rType);
 				break;
 			case Ordinary:// 标准查询
+				System.out.println("标准查询");
 				reStr = new SearchControl().searchOrdinary(args, rType);
 				break;
 			case FilterByOnto:// 图谱推理过滤查询
 			{
 				try {
+					System.out.println("图谱推理过滤查询");
 					reStr = new SearchControl()
 							.searchFilterByOnto(
 									args,

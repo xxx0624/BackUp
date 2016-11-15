@@ -15,7 +15,6 @@ import org.jsoup.nodes.Element;
 //import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
-
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
@@ -285,7 +284,7 @@ public class SearchControl extends Search {
 		if(noAnswerFlag==true && res.size()>0){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("由于新系统启用，新的知识库在完善扩展中，您的问题我们已经记录下来，该问题请关注神计报税公众号中相关解答.");
-			tempAns.setQuestion("");
+			tempAns.setQuestion("友情提示:");
 			tempAns.setScore(res.get(0).getScore());
 			tempAns.setSimilarity(res.get(0).getSimilarity());
 			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
@@ -469,6 +468,28 @@ public class SearchControl extends Search {
 		return html;
 	}
 	
+	private List<? extends XQSearchBean> aftertreatmentWithoutCutline(String args,
+			List<? extends XQSearchBean> beans, Comparator comparator) {
+		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
+		try {
+			maxAndMyDictSimilarity = new MaxAndMyDictSimilarity(args);
+		} catch (EngineException e) {
+			// TODO Auto-generated catch block
+			Log.getLogger(this.getClass()).error(e.getMessage(), e);
+			return new ArrayList();
+		}
+		// 设置相似度
+		try {
+			maxAndMyDictSimilarity.setSimilarity(beans);
+		} catch (EngineException e) {
+			// TODO Auto-generated catch block
+			Log.getLogger(this.getClass()).error(e.getMessage(), e);
+		}
+		// 自定义排序 important
+		maxAndMyDictSimilarity.sort(comparator, beans);
+		return beans;
+	}
+	
 	private String aftertreatmentBydeepLearning(String args,
 			List<? extends XQSearchBean> beans, Comparator comparator, String sentence) {
 		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
@@ -600,7 +621,7 @@ public class SearchControl extends Search {
 			return str;
 		else {
 			List<XQSearchBean> beans = search(sentence, relation);
-			System.err.println("searchOrdinary" + beans.size());
+			System.out.println("searchOrdinary(html) result size = " + beans.size());
 			return aftertreatmentBydeepLearning(sentence, beans,
 					new SimilarityComparator<XQSearchBean>(), sentence);
 		}
@@ -750,11 +771,71 @@ public class SearchControl extends Search {
 
 	public ResultShowBean searchOrdinaryNum(String sentence, int number,
 			ESearchRelation relation) throws SearchException, SearchException {
+		String str = pretreatment(sentence);
+		if (pretreatmentResult){
+			//直接数据库中抽取答案
+			IEnumSearch.ResultCode code = ResultCode.Tips;
+			List<String> reList = new ArrayList<>();
+			reList.add("友情提示:");
+			reList.add(str.length() >= 2 ? str.substring(2):str);
+			System.out.println("Type 1:" + reList.get(0));
+			System.out.println("Type 1:" + reList.get(1));
+			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+			return resultShowBean;
+		}
+		else {
+			List<XQSearchBean> beans = (List<XQSearchBean>) aftertreatmentWithoutCutline(
+					sentence,
+					search(sentence, relation),
+					new SimilarityComparator<XQSearchBean>()
+					);
+			System.out.println("searchOrdinary(no proxy) result size = " + beans.size());
+			if(beans.size() <= 0){
+				IEnumSearch.ResultCode code = ResultCode.Tips;
+				List<String> reList = new ArrayList<>();
+				String[] answerList = {
+						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
+						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
+						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~",
+						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！"
+						};
+				reList.add("友情提示：");
+				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
+				reList.add(answerList[randomAnswer]);
+				System.out.println("Type 3:" + reList.get(0));
+				System.out.println("Type 3:" + reList.get(1));
+				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+				return resultShowBean;
+			}
+			IEnumSearch.ResultCode code = null;
+			List<String> reList = new ArrayList<>();
+			int count = 0;
+			Iterator<XQSearchBean> iterator = beans.iterator();
+			while(iterator.hasNext()) {
+				XQSearchBean em = iterator.next();
+				if (count >= number) {
+					code = ResultCode.NunExact;
+					break;
+				}
+				reList.add(em.getQuestion());
+				reList.add(em.getAnswer());
+				System.out.println("(" + count + ")Type 4 question:" + em.getQuestion());
+				System.out.println("(" + count + ")Type 4 answer:" + em.getAnswer());
+				count++;
+			}
+			if(count <= 1){
+				code = ResultCode.Exact;
+			}
+			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+			return resultShowBean;
+		}
+		/*
 		String html = this.searchOrdinary(sentence, relation);
-		/*//add deepleanring
-		String html = this.searchOrdinaryByxxx0624(sentence, relation);*/
+		//add deepleanring
+		//String html = this.searchOrdinaryByxxx0624(sentence, relation);
 		// System.out.println(html);
 		return this.convertHtmlToBean(html, number);
+		*/
 	}
 
 	public ResultShowBean searchFilterByOntoNum(
@@ -784,14 +865,18 @@ public class SearchControl extends Search {
 			if (judgeUserConversation(html) == 1) {
 				code = ResultCode.Tips;
 				reList.add("友情提示:");
-				reList.add(html);
+				reList.add(parseA(html));
+				System.out.println("Type 1:" + reList.get(0));
+				System.out.println("Type 1:" + reList.get(1));
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 				return resultShowBean;
 			} else if (judgeUserConversation(html) == 2){
 				code = ResultCode.Tips;
 				reList.add("友情提示:");
-				reList.add(html);
+				reList.add(parseA(html));
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+				System.out.println("Type 2:" + reList.get(0));
+				System.out.println("Type 2:" + reList.get(1));
 				return resultShowBean;
 			}
 			else {
@@ -804,9 +889,10 @@ public class SearchControl extends Search {
 				code = ResultCode.Tips;
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
-				System.out.println(randomAnswer);
 				reList.add(answerList[randomAnswer]);
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+				System.out.println("Type 3:" + reList.get(0));
+				System.out.println("Type 3:" + reList.get(1));
 				return resultShowBean;
 			}
 		}
@@ -825,13 +911,20 @@ public class SearchControl extends Search {
 				} catch (IOException e) {
 					// TODO: handle exception
 					// [NeedToDo]这里不合理
-					e.printStackTrace();
-					continue;
+					//add my solution by xxx0624
+					result = new String[2];
+					result[0] = parseQ(html).equals(html)?"":html;
+					result[1] = parseA(html).equals(html)?"":html;
+					System.err.println(e.getMessage());
+					//e.printStackTrace();
+					//continue;
 				}
 				if (result == null || result.length == 0)
 					continue;
 				reList.add(result[0]);
 				reList.add(result[1]);
+				System.out.println("(" + count + ")question:" + result[0]);
+				System.out.println("(" + count + ")answer:" + result[1]);
 				count++;
 			}
 			int index = Parameters.maxAccurat - number;
@@ -846,7 +939,6 @@ public class SearchControl extends Search {
 			}
 		} catch (Exception e) {
 			Log.getLogger(this.getClass()).error(e.getMessage(), e);
-
 		}
 		ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 		return resultShowBean;
@@ -869,6 +961,28 @@ public class SearchControl extends Search {
 		str[0] = q;
 		str[1] = a;
 		return str;
+	}
+	
+	private String parseQ(String sen){
+		int pos1 = sen.indexOf("=\"q\">");
+		if(pos1>0){
+			int pos2 = sen.indexOf("</div>", pos1);
+			if (pos2 > pos1){
+				return sen.substring(pos1 + 5, pos2).replace("\\", "/").replace("'", " ").replace("‘", " ");
+			}
+		}
+		return sen;
+	}
+	
+	private String parseA(String sen){
+		int pos1 = sen.indexOf("=\"a\">");
+		if(pos1>0){
+		int pos2 = sen.indexOf("</div>", pos1);
+			if (pos2 > pos1){
+				return sen.substring(pos1 + 5, pos2).replace("\\", "/").replace("'", " ").replace("‘", " ");
+			}
+		}
+		return sen;
 	}
 
 	public static void main(String[] str) throws SearchException {
