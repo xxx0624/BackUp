@@ -778,9 +778,11 @@ public class SearchControl extends Search {
 			List<String> reList = new ArrayList<>();
 			reList.add("友情提示:");
 			reList.add(str.length() >= 2 ? str.substring(2):str);
-			System.out.println("Type 1:" + reList.get(0));
-			System.out.println("Type 1:" + reList.get(1));
 			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+			System.out.println("Type 1:code = " + resultShowBean.getCode().value());
+			System.out.println("Type 1:list size = " + resultShowBean.getResult().size());
+			System.out.println("Type 1:" + resultShowBean.getResult().get(0));
+			System.out.println("Type 1:" + resultShowBean.getResult().get(1));
 			return resultShowBean;
 		}
 		else {
@@ -802,9 +804,11 @@ public class SearchControl extends Search {
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
 				reList.add(answerList[randomAnswer]);
-				System.out.println("Type 3:" + reList.get(0));
-				System.out.println("Type 3:" + reList.get(1));
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+				System.out.println("Type 3:code = " + resultShowBean.getCode().value());
+				System.out.println("Type 3:list size = " + resultShowBean.getResult().size());
+				System.out.println("Type 3:" + resultShowBean.getResult().get(0));
+				System.out.println("Type 3:" + resultShowBean.getResult().get(1));
 				return resultShowBean;
 			}
 			IEnumSearch.ResultCode code = null;
@@ -827,6 +831,8 @@ public class SearchControl extends Search {
 				code = ResultCode.Exact;
 			}
 			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
+			System.out.println("Type 4:code = " + resultShowBean.getCode().value());
+			System.out.println("Type 4:list size = " + resultShowBean.getResult().size());
 			return resultShowBean;
 		}
 		/*

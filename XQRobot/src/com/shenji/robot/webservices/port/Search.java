@@ -83,6 +83,7 @@ public class Search {
 		ESearchRelation rType = (ESearchRelation) searchEnums[0];
 		IEnumSearch.SearchConditionType cType = (IEnumSearch.SearchConditionType) searchEnums[1];
 		System.out.println("search web service (no proxy):");
+		System.out.println("number = " + number + " relationType = " + relationType + " conditionType = " + conditionType);
 		try {
 			switch (cType) {
 			case Basics:// 基础查询
@@ -91,8 +92,7 @@ public class Search {
 				break;
 			case Ordinary:// 标准查询
 				System.out.println("标准查询");
-				bean = new SearchControl().searchOrdinaryNum(args, number,
-						rType);
+				bean = new SearchControl().searchOrdinaryNum(args, number, rType);
 				break;
 			case FilterByOnto:// 图谱推理过滤查询
 			{
