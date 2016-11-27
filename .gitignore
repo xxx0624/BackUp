@@ -4,6 +4,8 @@
 *.png
 *.zip
 *.class
+*.scc
 *.pyc
 .idea/
 target/
+XQRobot/WebRoot/WEB-INF/classes

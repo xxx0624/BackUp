@@ -1,5 +1,6 @@
 *.class
+*.scc
 *.log
 *.yml
 *.pyc
-
+WebRoot/WEB-INF/classes
