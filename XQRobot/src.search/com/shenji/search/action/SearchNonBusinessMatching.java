@@ -32,6 +32,7 @@ public class SearchNonBusinessMatching {
 		// 进行分词
 		String ikStr = new FenciControl().iKAnalysis(arg);
 		String[] ikStrs = ikStr.split("/");
+		System.out.println("isBusinessQuestion(" + arg + "):" + ikStr);
 		for (String word : ikStrs) {
 			// 词在自建词典中
 			if (word.length() > 1 && customWordEngine.isCustomWord(word))

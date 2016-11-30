@@ -74,8 +74,8 @@ public class Search {
 		}
 	}
 
-	private SearchParamsBean getSearchParamBean(String sentence,
-			ESearchRelation relation) {
+	private SearchParamsBean getSearchParamBean(String sentence, ESearchRelation relation) {
+		System.out.println("getSearchParamBean(" + sentence + ")");
 		SearchParamsBean paramsBean = new SearchParamsBean(sentence, relation,
 				getFineGrainedParticipleArray(sentence),
 				getCoarseGrainedParticipleArray(sentence));
@@ -90,8 +90,7 @@ public class Search {
 		return getParticipleArray(sentence, true);
 	}
 
-	private static Set<String> getParticipleArray(String sentence,
-			boolean isCoarseGrained) {
+	private static Set<String> getParticipleArray(String sentence, boolean isCoarseGrained) {
 		Set<String> participleArray = new LinkedHashSet<String>();
 		Fenci fenci = new Fenci();
 		String participleStr;
@@ -99,6 +98,7 @@ public class Search {
 			participleStr = fenci.iKAnalysisMax(sentence);
 		else
 			participleStr = fenci.iKAnalysis(sentence);
+		System.out.println("getParticipleArray("+sentence+", "+isCoarseGrained+"):"+participleStr);
 		participleArray.addAll(Arrays.asList(participleStr.split("/")));
 		return participleArray;
 	}
