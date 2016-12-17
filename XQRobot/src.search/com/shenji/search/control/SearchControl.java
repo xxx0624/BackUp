@@ -198,7 +198,7 @@ public class SearchControl extends Search {
 				classifyTag = -1;
 		}
 		classifyTag = 7;
-		//special case
+		//special case 
 		String[] errorCodeList = { "3001", "5001", "6001", "7001", "8001", "9001"};
 		int errorIndex = -1;
 		for(int i = 0; i < errorCodeList.length; i ++){
@@ -247,8 +247,7 @@ public class SearchControl extends Search {
 			res = (List<XQSearchBean>) super.search(sentence, iSearchFolder,
 					relation, booleanSearch);
 		}
-		// modify
-		System.out.println("总匹配条数=" + res.size());
+		Log.getLogger().info("总匹配条数=" + res.size());
 		/*
 		 * 1.一问一答，则只取出一问一答(自己设定上限)。 2.剔除匹配度太低的问答对(自己设定下限)
 		 */
@@ -256,7 +255,7 @@ public class SearchControl extends Search {
 		boolean noAnswerFlag = true;
 		int cntBean = 0;
 		boolean oneAnswerFlag = false;
-		double up_score = 1.30;
+		double up_score = 2.10;
 		double low_score = 0.01;
 		int print_cnt = 3;
 		while (it.hasNext()) {
@@ -265,15 +264,15 @@ public class SearchControl extends Search {
 				noAnswerFlag = false;
 			}
 			if (cntBean < print_cnt) {
-				/*System.out.println("current print No:" + cntBean);
+				System.out.println("current print No:" + cntBean);
 				System.out.println("score:" + cur.getScore());
-				System.out.println("uri:" + cur.getUri());
 				System.out.println("question:" + cur.getQuestion());
-				System.out.println("answer:" + cur.getAnswer());*/
+				System.out.println("answer:" + cur.getAnswer());
 			}
 			if (cntBean == 0 && oneAnswerFlag == false
 					&& cur.getScore() > up_score) {
 				oneAnswerFlag = true;
+				cntBean++;
 				continue;
 			}
 			if (oneAnswerFlag == true || cur.getScore() <= low_score) {
@@ -321,7 +320,7 @@ public class SearchControl extends Search {
 		else if(sentence.contains("4001")){
 			res = new ArrayList<XQSearchBean>();
 		}
-		System.out.println("现匹配条数" + res.size());
+		Log.getLogger().info("[upScore="+up_score+"][lowScore="+low_score+"] 筛选过后现匹配条数" + res.size());
 		//add qa log
 		Callable<List<? extends XQSearchBean>> c = new InsertThread(sentence,res);
 		insertLogPool.submit(c);
@@ -594,6 +593,7 @@ public class SearchControl extends Search {
 			Log.getLogger(this.getClass()).error(e.getMessage(), e);
 		}
 		if (answer != null && answer.length() > 0) {
+			Log.getLogger().info("mysql中问候语句");
 			pretreatmentResult = true;
 			return "答:" + answer;
 		} else {
@@ -601,6 +601,7 @@ public class SearchControl extends Search {
 			try {
 				if ((mattchingStr = SearchNonBusinessMatching.matching(args)) != null) {
 					pretreatmentResult = true;
+					Log.getLogger().info("用户问题中不存在业务词");
 					return "答:" + mattchingStr;
 				}
 			} catch (EngineException e) {
@@ -621,9 +622,8 @@ public class SearchControl extends Search {
 			return str;
 		else {
 			List<XQSearchBean> beans = search(sentence, relation);
-			System.out.println("searchOrdinary(html) result size = " + beans.size());
-			return aftertreatmentBydeepLearning(sentence, beans,
-					new SimilarityComparator<XQSearchBean>(), sentence);
+			Log.getLogger().info("searchOrdinary(html) result size = " + beans.size());
+			return aftertreatmentBydeepLearning(sentence, beans,new SimilarityComparator<XQSearchBean>(), sentence);
 		}
 
 	}
@@ -791,7 +791,7 @@ public class SearchControl extends Search {
 					search(sentence, relation),
 					new SimilarityComparator<XQSearchBean>()
 					);
-			System.out.println("searchOrdinary(no proxy) result size = " + beans.size());
+			Log.getLogger().info("searchOrdinary(no proxy) result size = " + beans.size());
 			if(beans.size() <= 0){
 				IEnumSearch.ResultCode code = ResultCode.Tips;
 				List<String> reList = new ArrayList<>();
@@ -851,7 +851,7 @@ public class SearchControl extends Search {
 			IComReasonerServer reasonerServer,
 			Comparator<? extends XQSearchBean> comparator)throws SearchException, OntoReasonerException, SearchException {
 		String html = this.searchFilterByOnto(sentence, relation, reasonerServer, comparator);
-		System.out.println("onto's html = " + html);
+		Log.getLogger().info("onto's html = " + html);
 		return this.convertHtmlToBean(html, number);
 	}
 

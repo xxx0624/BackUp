@@ -12,11 +12,14 @@ import com.shenji.search.control.Configuration;
 import com.shenji.search.core.engine.CustomWordEngine;
 import com.shenji.search.core.exception.EngineException;
 
+import com.shenji.common.log.Log;
+
 public class CustomWordDic implements CustomWordEngine {
 	private static Set<String> customDic;
 	private static Set<String> costomEnChDic;
 
 	private CustomWordDic() throws EngineException {
+		Log.getLogger().info("init: loading myDict.dic");
 		init();
 		// 做一次就可以了、、以后注释掉吧
 		// removeDictDuplicate();
