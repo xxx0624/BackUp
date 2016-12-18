@@ -35,7 +35,8 @@ public class SearchNonBusinessMatching {
 		System.out.println("isBusinessQuestion(" + arg + "):" + ikStr);
 		for (String word : ikStrs) {
 			// 词在自建词典中
-			if (word.length() > 1 && customWordEngine.isCustomWord(word))
+			if (word.length() > 1 && 
+					(customWordEngine.isCustomWord(word)||customWordEngine.isCustomWord(word.toLowerCase())))
 				return true;
 			// 分的词的同义词在自建词典中
 			String[] synStrs = synonymEngine.getSynonyms(word.toLowerCase());

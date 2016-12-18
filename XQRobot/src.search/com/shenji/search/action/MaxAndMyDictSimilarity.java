@@ -21,6 +21,10 @@ public class MaxAndMyDictSimilarity extends SimilarityStrategy {
 	// private SynonymEngine engine;
 	private List<String> matchList;
 	private Set<String> maxMatchSet;
+	
+	private double eps = 0.00000000001;
+	
+	private double tfidfPart = 0.7;
 
 	public MaxAndMyDictSimilarity(String args) throws EngineException {
 		this.matchList = new ArrayList<String>();
@@ -37,15 +41,23 @@ public class MaxAndMyDictSimilarity extends SimilarityStrategy {
 			return;
 		double qaProportion = Parameters.qaProportion;
 		List<String> inIkDictList = new ArrayList<String>();
+		Set<String> leftIkDictSet = new HashSet<String>();
 		for (String s : matchList) {
-			if (customWordEngine.isCustomWord(s.trim()))
-				inIkDictList.add(s.trim());
+			if (customWordEngine.isCustomWord(s.trim().toLowerCase())){
+				inIkDictList.add(s.trim().toLowerCase());
+			}
+			else if (customWordEngine.isCustomWord(s.trim())){
+				inIkDictList.add(s.trim().toLowerCase());
+			}
+			else{
+				leftIkDictSet.add(s.trim().toLowerCase());
+			}
 		}
 		double num = inIkDictList.size();
 		for (XQSearchBean searchBean : beans) {
 			double similarity = 0;
-			String answer = searchBean.getAnswer();
-			String question = searchBean.getQuestion();
+			String answer = searchBean.getAnswer().toLowerCase();
+			String question = searchBean.getQuestion().toLowerCase();
 			String answerMatch = "_";
 			String questionMatch = "_";
 			for (String s : inIkDictList) {
@@ -58,8 +70,18 @@ public class MaxAndMyDictSimilarity extends SimilarityStrategy {
 					questionMatch = questionMatch + "_" + s;
 				}
 			}
-
+			for (String s:leftIkDictSet){
+				if(answer.contains(s)){
+					similarity += 0.01;
+				}
+				if(question.contains(s)){
+					similarity += 0.01 * qaProportion;
+				}
+			}
+			
+			 //before
 			similarity = similarity / num + searchBean.getScore();
+			
 			searchBean.setSimilarity(similarity);
 		}
 		if (customWordEngine != null)

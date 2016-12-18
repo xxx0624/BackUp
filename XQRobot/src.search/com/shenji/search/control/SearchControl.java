@@ -51,6 +51,9 @@ public class SearchControl extends Search {
 	private static ExecutorService insertLogPool;
 	
 	private boolean pretreatmentResult = false;
+	
+	private double topSimilarity = 3.3;
+	private double lowSimilarity = 0.01;
 
 	// 判断用户的意图，声明7种搜索所可能包含的关键词
 	String[] howQ = { "有问题", "写错", "有错误", "有误", "帮我", "请帮忙", "怎", "如何", "解决办法",
@@ -250,8 +253,9 @@ public class SearchControl extends Search {
 		Log.getLogger().info("总匹配条数=" + res.size());
 		/*
 		 * 1.一问一答，则只取出一问一答(自己设定上限)。 2.剔除匹配度太低的问答对(自己设定下限)
+		 * 此处筛选的是倒排索引的score
 		 */
-		Iterator<XQSearchBean> it = res.iterator();
+		/*Iterator<XQSearchBean> it = res.iterator();
 		boolean noAnswerFlag = true;
 		int cntBean = 0;
 		boolean oneAnswerFlag = false;
@@ -290,6 +294,8 @@ public class SearchControl extends Search {
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
+		Log.getLogger().info("[upScore="+up_score+"][lowScore="+low_score+"] 筛选过后现匹配条数" + res.size());
+		*/
 		if(sentence.contains("7001")){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
@@ -300,9 +306,8 @@ public class SearchControl extends Search {
 					+ "（2）CA驱动下载：登录http://62111929.net--下载 协卡助手，下载安装时U棒不能插在电脑上，"
 					+ "安装前在控制面板中把原来的驱动卸载。");
 			tempAns.setQuestion("7001 报错的错误详情");
-			tempAns.setScore(res.get(0).getScore());
-			tempAns.setSimilarity(res.get(0).getSimilarity());
-			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
+			tempAns.setSimilarity((float)(topSimilarity + 1.0));
+			tempAns.setHtmlContent("");	
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
@@ -311,16 +316,14 @@ public class SearchControl extends Search {
 			tempAns.setAnswer("点击【错误详情】，查看具体错误。8001是与您在网站登记情况相关，主要集中未开户或者序列号变更有关。"
 					+ "遇到这种情况的话，请联系您的电子报税服务商，由他们为您在网站端进行开户、修改CA或者查询。");
 			tempAns.setQuestion("8001 报错的错误详情");
-			tempAns.setScore(res.get(0).getScore());
-			tempAns.setSimilarity(res.get(0).getSimilarity());
-			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
+			tempAns.setSimilarity((float)(topSimilarity + 1.0));
+			tempAns.setHtmlContent("");		
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
 		else if(sentence.contains("4001")){
 			res = new ArrayList<XQSearchBean>();
 		}
-		Log.getLogger().info("[upScore="+up_score+"][lowScore="+low_score+"] 筛选过后现匹配条数" + res.size());
 		//add qa log
 		Callable<List<? extends XQSearchBean>> c = new InsertThread(sentence,res);
 		insertLogPool.submit(c);
@@ -486,10 +489,11 @@ public class SearchControl extends Search {
 		}
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
+		filterByTopBetweenLowSimilarity(beans);
 		return beans;
 	}
 	
-	private String aftertreatmentBydeepLearning(String args,
+	private String aftertreatment(String args,
 			List<? extends XQSearchBean> beans, Comparator comparator, String sentence) {
 		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
 		try {
@@ -508,6 +512,7 @@ public class SearchControl extends Search {
 		}
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
+		filterByTopBetweenLowSimilarity(beans);
 		/*
 		//add deep learning
         try{
@@ -575,6 +580,34 @@ public class SearchControl extends Search {
 		return DividingLineServer.cutlineSort(beans);
 	}
 
+	private void filterByTopBetweenLowSimilarity(List<? extends XQSearchBean> beans){
+		Iterator<? extends XQSearchBean> iterator = beans.iterator();
+		boolean oneAnswerFlag = false;
+		int cnt = 0;
+		int print_cnt = 3;
+		while(iterator.hasNext()){
+			XQSearchBean bean = iterator.next();
+			if(cnt < print_cnt){
+				System.out.println("["+cnt+"][Similarity="+bean.getSimilarity()+"][Score="+bean.getScore()+"]");
+				System.out.println(bean.getQuestion());
+				System.out.println(bean.getAnswer());
+			}
+			cnt += 1;
+			if(oneAnswerFlag == true){
+				iterator.remove();
+			}
+			if(bean.getSimilarity() >= topSimilarity){
+				oneAnswerFlag = true;
+				continue;
+			}
+			if(bean.getSimilarity() <= lowSimilarity){
+				iterator.remove();
+				continue;
+			}
+		}
+	}
+	
+	
 	private String pretreatment(String args) {
 		String mattchingStr = null;
 		// 大小写转换
@@ -623,7 +656,7 @@ public class SearchControl extends Search {
 		else {
 			List<XQSearchBean> beans = search(sentence, relation);
 			Log.getLogger().info("searchOrdinary(html) result size = " + beans.size());
-			return aftertreatmentBydeepLearning(sentence, beans,new SimilarityComparator<XQSearchBean>(), sentence);
+			return aftertreatment(sentence, beans,new SimilarityComparator<XQSearchBean>(), sentence);
 		}
 
 	}

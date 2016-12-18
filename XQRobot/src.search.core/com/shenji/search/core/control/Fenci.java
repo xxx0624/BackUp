@@ -33,6 +33,9 @@ public class Fenci{
 			String maxFencis = "";
 			for (String fenci : fencis) {
 				int p = str.indexOf(fenci);
+				if(p == -1){
+					p = str.trim().toLowerCase().indexOf(fenci.trim().toLowerCase());
+				}
 				while (p <= position) {
 					fenci = fenci.substring(1);
 					if (fenci == null || fenci.length() == 0)

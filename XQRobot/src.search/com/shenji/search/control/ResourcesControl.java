@@ -134,6 +134,7 @@ public class ResourcesControl {
 		String operation = "重建索引";
 		dbManager.modifyLog(operation, operation);
 		boolean b = false;
+		//同时为同义词和自己的同义词建索引
 		b = new SynonmIndexServer().createIndex();
 		// 删除索引目录
 		File indexFile = null;

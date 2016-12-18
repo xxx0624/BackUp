@@ -5,7 +5,7 @@
 	<!--用户可以在这里配置自己的扩展字典
 	<entry key="ext_dict">/mydict.dic; /mypack/mydict2.dic ; /com/mycompany/dic/mydict3.dic ;</entry> 
 	 --> 
-	 <entry key="ext_dict">resources/dic/mydict.dic;resources/dic/main.dic;resources/dic/sjn+n/sjDic.dic;resources/dic/sja+n/sjDic.dic;resources/dic/sjm+n/sjDic.dic; resources/dic/mypack/mydict2.dic ; com/mycompany/dic/mydict3.dic ;</entry> 
+	 <entry key="ext_dict">resources/dic/mydict.dic;resources/dic/main.dic;resources/dic/sjn+n/sjDic.dic;resources/dic/sja+n/sjDic.dic;resources/dic/sjm+n/sjDic.dic;</entry> 
 	 <!--用户可以在这里配置自己的扩展停止词字典
 	<entry key="ext_stopwords">/ext_stopword.dic</entry> 
 	-->
