@@ -307,8 +307,11 @@ public class SearchControl extends Search {
 					+ "安装前在控制面板中把原来的驱动卸载。");
 			tempAns.setQuestion("7001 报错的错误详情");
 			tempAns.setScore((float)(topSimilarity));
-			tempAns.setHtmlContent("");	
-			res = new ArrayList<XQSearchBean>();
+			tempAns.setHtmlContent(tempAns.getQuestion()
+					+"<br>"
+					+tempAns.getAnswer()
+					+"");	
+			//res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
 		else if(sentence.contains("8001")){
@@ -317,8 +320,11 @@ public class SearchControl extends Search {
 					+ "遇到这种情况的话，请联系您的电子报税服务商，由他们为您在网站端进行开户、修改CA或者查询。");
 			tempAns.setQuestion("8001 报错的错误详情");
 			tempAns.setScore((float)(topSimilarity));
-			tempAns.setHtmlContent("");		
-			res = new ArrayList<XQSearchBean>();
+			tempAns.setHtmlContent(tempAns.getQuestion()
+					+"<br>"
+					+tempAns.getAnswer()
+					+"");	
+			//res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
 		}
 		else if(sentence.contains("4001")){
@@ -595,6 +601,7 @@ public class SearchControl extends Search {
 			cnt += 1;
 			if(oneAnswerFlag == true){
 				iterator.remove();
+				continue;
 			}
 			if(bean.getSimilarity() >= topSimilarity){
 				oneAnswerFlag = true;
