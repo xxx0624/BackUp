@@ -306,7 +306,7 @@ public class SearchControl extends Search {
 					+ "（2）CA驱动下载：登录http://62111929.net--下载 协卡助手，下载安装时U棒不能插在电脑上，"
 					+ "安装前在控制面板中把原来的驱动卸载。");
 			tempAns.setQuestion("7001 报错的错误详情");
-			tempAns.setSimilarity((float)(topSimilarity + 1.0));
+			tempAns.setScore((float)(topSimilarity));
 			tempAns.setHtmlContent("");	
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
@@ -316,7 +316,7 @@ public class SearchControl extends Search {
 			tempAns.setAnswer("点击【错误详情】，查看具体错误。8001是与您在网站登记情况相关，主要集中未开户或者序列号变更有关。"
 					+ "遇到这种情况的话，请联系您的电子报税服务商，由他们为您在网站端进行开户、修改CA或者查询。");
 			tempAns.setQuestion("8001 报错的错误详情");
-			tempAns.setSimilarity((float)(topSimilarity + 1.0));
+			tempAns.setScore((float)(topSimilarity));
 			tempAns.setHtmlContent("");		
 			res = new ArrayList<XQSearchBean>();
 			res.add(tempAns);
