@@ -52,7 +52,7 @@ public class SearchControl extends Search {
 	
 	private boolean pretreatmentResult = false;
 	
-	private double topSimilarity = 3.3;
+	private double topSimilarity = 3.8;
 	private double lowSimilarity = 0.01;
 
 	// 判断用户的意图，声明7种搜索所可能包含的关键词

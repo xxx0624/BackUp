@@ -62,20 +62,20 @@ public class MaxAndMyDictSimilarity extends SimilarityStrategy {
 			String questionMatch = "_";
 			for (String s : inIkDictList) {
 				if ((!answerMatch.contains(s)) && answer.contains(s)) {
-					similarity += 0.1 * qaProportion;
+					similarity += inIkDictAnswerWordWeight(s) * qaProportion;
 					answerMatch = answerMatch + "_" + s;
 				}
 				if ((!questionMatch.contains(s)) && question.contains(s)) {
-					similarity += 1;
+					similarity += inIkDictQuestionWordWeight(s);
 					questionMatch = questionMatch + "_" + s;
 				}
 			}
 			for (String s:leftIkDictSet){
 				if(answer.contains(s)){
-					similarity += 0.01;
+					similarity += 0.04;
 				}
 				if(question.contains(s)){
-					similarity += 0.01 * qaProportion;
+					similarity += 0.1 * qaProportion;
 				}
 			}
 			
@@ -87,6 +87,33 @@ public class MaxAndMyDictSimilarity extends SimilarityStrategy {
 		if (customWordEngine != null)
 			customWordEngine.close();
 	}
+	
+	//0.15 ~ 0.3
+	private double inIkDictAnswerWordWeight(String s) {
+		double ans = 0;
+		if(s.length() <= 3) {
+			ans = 0.15;
+		}
+		else{
+			ans = 0.05 * s.length();
+		}
+		if(ans > 0.3) ans = 0.3;
+		return ans;
+	}
+	
+	//1 ~ 2.0
+	private double inIkDictQuestionWordWeight(String s) {
+		double ans = 0;
+		if(s.length() <= 3) {
+			ans = 1.0;
+		}
+		else{
+			ans = 1.6;
+		}
+		if(ans > 2.0) ans = 2.0;
+		return ans;
+	}
+	
 
 	private void initMachingList(String args) {
 		StringReader reader = new StringReader(args);
