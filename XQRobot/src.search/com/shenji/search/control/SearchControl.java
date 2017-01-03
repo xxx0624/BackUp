@@ -495,7 +495,11 @@ public class SearchControl extends Search {
 		}
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
+		System.out.println("[after sort] bean size=" + beans.size());
 		filterByTopBetweenLowSimilarity(beans);
+		System.out.println("[after filter by similarity] bean size=" + beans.size());
+		filterByQATags(beans, args);
+		System.out.println("[after filter by QATags] bean size=" + beans.size());
 		return beans;
 	}
 	
@@ -518,7 +522,11 @@ public class SearchControl extends Search {
 		}
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
+		System.out.println("[after sort] bean size=" + beans.size());
 		filterByTopBetweenLowSimilarity(beans);
+		System.out.println("[after filter by similarity] bean size=" + beans.size());
+		filterByQATags(beans, args);
+		System.out.println("[after filter by QATags] bean size=" + beans.size());
 		/*
 		//add deep learning
         try{
@@ -614,6 +622,32 @@ public class SearchControl extends Search {
 		}
 	}
 	
+	
+	private void filterByQATags(List<? extends XQSearchBean> beans, String userQuestion){
+		Iterator<? extends XQSearchBean> iterator = beans.iterator();
+		while(iterator.hasNext()){
+			XQSearchBean bean = iterator.next();
+			String tag1 = bean.getTag1();
+			String tag2 = bean.getTag2();
+			//确保tag1 tag2不能为null
+			if(tag1 != null && tag2 != null){
+				String tagString = tag1 + tag2;
+				if(!tagString.equals("")){
+					String[] tagList = tagString.trim().split(",");
+					boolean exist = false;
+					for(String tag:tagList){
+						if(userQuestion.contains(tag)){
+							exist = true;
+							break;
+						}
+					}
+					if(exist == false){
+						iterator.remove();
+					}
+				}
+			}
+		}
+	}
 	
 	private String pretreatment(String args) {
 		String mattchingStr = null;

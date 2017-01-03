@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.bcel.generic.NEW;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.FieldSelectorResult;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
@@ -62,10 +64,16 @@ public class FAQSearchIndex extends SearchIndex {
 		}
 		List<Field> fields = new ArrayList<Field>(3);
 		Field q_field = new Field(XQSearchBean.Field.QUESTION,
-				searchBean.getQuestion(), Field.Store.YES,
-				Field.Index.ANALYZED, TermVector.NO);
+				searchBean.getQuestion(), Field.Store.YES,Field.Index.ANALYZED, 
+				TermVector.NO);
 		Field a_field = new Field(XQSearchBean.Field.ANSWER,
 				searchBean.getAnswer(), Field.Store.YES, Field.Index.ANALYZED,
+				TermVector.NO);
+		Field tag1_field = new Field(XQSearchBean.Field.TAG1, 
+				searchBean.getTag1(), Field.Store.YES, Field.Index.NOT_ANALYZED,
+				TermVector.NO);
+		Field tag2_field = new Field(XQSearchBean.Field.TAG2, 
+				searchBean.getTag2(), Field.Store.YES, Field.Index.NOT_ANALYZED,
 				TermVector.NO);
 		Field uri_field = new Field(XQSearchBean.Field.URI,
 				searchBean.getUri(), Field.Store.YES, Field.Index.NOT_ANALYZED,
@@ -78,6 +86,8 @@ public class FAQSearchIndex extends SearchIndex {
 		fields.add(q_field);
 		fields.add(a_field);
 		fields.add(uri_field);
+		fields.add(tag1_field);
+		fields.add(tag2_field);
 		return fields;
 	}
 
@@ -270,14 +280,18 @@ public class FAQSearchIndex extends SearchIndex {
 			String question = getQuestion(html);
 			String answer = getAnswer(html);
 			String uri = getURI(file);
+			String tag1 = getTAG(html, ".tag1");
+			String tag2 = getTAG(html, ".tag2");
 			bean.setAnswer(answer);
 			// bean.setContent(content);
 			bean.setQuestion(question);
 			bean.setUri(uri);
+			bean.setTag1(tag1);
+			bean.setTag2(tag2);
 			System.out.println("uri=" + uri);
 			super.addIndex(bean, tag);
 			System.out.print(count++ + " ");
-			if (count % 200 == 0)
+			if (count % 100 == 0)
 				System.out.println("");
 
 		} catch (Exception e) {
@@ -302,6 +316,14 @@ public class FAQSearchIndex extends SearchIndex {
 		org.jsoup.nodes.Document document = null;
 		document = Jsoup.parse(htmlStr);
 		Elements meta = document.select(".q");
+		// System.out.println(meta.text());
+		return meta.text();
+	}
+	
+	private String getTAG(String htmlStr, String tag) {
+		org.jsoup.nodes.Document document = null;
+		document = Jsoup.parse(htmlStr);
+		Elements meta = document.select(tag);
 		// System.out.println(meta.text());
 		return meta.text();
 	}

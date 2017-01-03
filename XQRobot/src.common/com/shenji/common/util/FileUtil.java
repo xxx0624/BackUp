@@ -7,6 +7,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -311,6 +312,19 @@ public class FileUtil {
 			}
 		}
 		return flag;
+	}
+	
+	//read file content
+	public static String readFileContent(String filepath) 
+			throws IOException{
+		BufferedReader reader = new BufferedReader(new FileReader(filepath));
+		String content = "";
+		String line = "";
+		while((line = reader.readLine())!=null){
+			content += line;
+		}
+		reader.close();
+		return content;
 	}
 
 	public static void main(String[] str) throws Exception {

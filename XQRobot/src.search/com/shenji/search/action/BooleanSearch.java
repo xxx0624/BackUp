@@ -77,10 +77,14 @@ public class BooleanSearch extends AbsBooleanSearch {
 			String question = doc.get(XQSearchBean.Field.QUESTION);
 			String answer = doc.get(XQSearchBean.Field.ANSWER);
 			String uri = doc.get(XQSearchBean.Field.URI);
+			String tag1 = doc.get(XQSearchBean.Field.TAG1);
+			String tag2 = doc.get(XQSearchBean.Field.TAG2);
 			XQSearchBean bean = new XQSearchBean();
 			bean.setQuestion(question);
 			bean.setAnswer(answer);
 			bean.setUri(uri);
+			bean.setTag1(tag1);
+			bean.setTag2(tag2);
 			// 固有相似度
 			String[] simWords = paramsBean.getCoarseGrainedParticipleArray()
 					.toArray(
