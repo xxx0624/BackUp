@@ -322,10 +322,10 @@ public class FAQSearchIndex extends SearchIndex {
 	
 	private String getTAG(String htmlStr, String tag) {
 		org.jsoup.nodes.Document document = null;
-		document = Jsoup.parse(htmlStr);
-		Elements meta = document.select(tag);
-		// System.out.println(meta.text());
-		return meta.text();
+        document = Jsoup.parse(htmlStr);
+        Elements meta = document.getElementsByAttributeValue("name", tag);
+        // System.out.println(meta.text());
+        return meta.attr("content");
 	}
 
 	private String getAnswer(String htmlStr) {

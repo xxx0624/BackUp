@@ -625,27 +625,111 @@ public class SearchControl extends Search {
 	
 	private void filterByQATags(List<? extends XQSearchBean> beans, String userQuestion){
 		Iterator<? extends XQSearchBean> iterator = beans.iterator();
+		int tags2Count = 0;
+		int tags1Count = 0;
+		//Count
 		while(iterator.hasNext()){
 			XQSearchBean bean = iterator.next();
 			String tag1 = bean.getTag1();
 			String tag2 = bean.getTag2();
 			//确保tag1 tag2不能为null
 			if(tag1 != null && tag2 != null){
-				String tagString = tag1 + tag2;
-				if(!tagString.equals("")){
-					String[] tagList = tagString.trim().split(",");
-					boolean exist = false;
-					for(String tag:tagList){
-						if(userQuestion.contains(tag)){
-							exist = true;
+				//qa with 2 tags
+				if(!tag1.equals("") && !tag2.equals("")){
+					int existCnt = 0;
+					String[] tag1List = tag1.trim().split(",");
+					for(String t:tag1List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
 							break;
 						}
 					}
-					if(exist == false){
-						iterator.remove();
+					String[] tag2List = tag2.trim().split(",");
+					for(String t:tag2List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					if(existCnt == 2){
+						tags2Count += 1;
+					}
+				}
+				//qa with 1 tags
+				else if(!tag1.equals("") || !tag2.equals("")){
+					int existCnt = 0;
+					String[] tag1List = tag1.trim().split(",");
+					for(String t:tag1List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					String[] tag2List = tag2.trim().split(",");
+					for(String t:tag2List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					if(existCnt == 1){
+						tags1Count += 1;
 					}
 				}
 			}
+		}
+		//Remove
+		iterator = beans.iterator();
+		while( iterator.hasNext() && ((tags1Count + tags2Count) > 0) ){
+			XQSearchBean bean = iterator.next();
+			String tag1 = bean.getTag1();
+			String tag2 = bean.getTag2();
+			//确保tag1 tag2不能为null
+			if(tag1 != null && tag2 != null){
+				//qa with 2 tags
+				if(!tag1.equals("") && !tag2.equals("")){
+					int existCnt = 0;
+					String[] tag1List = tag1.trim().split(",");
+					for(String t:tag1List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					String[] tag2List = tag2.trim().split(",");
+					for(String t:tag2List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					if(existCnt == 2){
+						continue;
+					}
+				}
+				//qa with 1 tags
+				else if(!tag1.equals("") || !tag2.equals("")){
+					int existCnt = 0;
+					String[] tag1List = tag1.trim().split(",");
+					for(String t:tag1List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					String[] tag2List = tag2.trim().split(",");
+					for(String t:tag2List){
+						if(userQuestion.contains(t) && !t.equals("")){
+							existCnt += 1;
+							break;
+						}
+					}
+					if(existCnt == 1){
+						continue;
+					}
+				}
+			}
+			iterator.remove();
 		}
 	}
 	

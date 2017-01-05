@@ -19,13 +19,13 @@ public class NormalQAFileName {
 		return meta.text();
 	}
 	public static void main(String[] args) throws IOException{
-		String filePath = "D:\\software\\tomcat\\apache-tomcat-7.0.63\\webapps\\XQDoc\\document\\faq2";
+		String filePath = "D:\\software\\tomcat\\apache-tomcat-7.0.63\\webapps\\XQDoc\\document\\faq";
 		File file = new File(filePath);
 		if(file.isDirectory()){
 			File[] files = file.listFiles();
 			int cnt = 0;
 			for(File f: files){
-				System.out.println("["+cnt+"]"+f.getAbsolutePath());
+				System.out.println("["+cnt+"]"+f.getName());
 				cnt += 1;
 				String fileContent = FileUtil.readFileContent(f.getAbsolutePath());
 				String q = getTAG(fileContent, ".q");
@@ -34,6 +34,11 @@ public class NormalQAFileName {
 				String tag2 = getTAG(fileContent, ".tag2");
 				String newFileName = MD5Util.md5(q + a) + ".html";
 				//File newFile = new File(filePath + "\\" + newFileName + ".html");
+				File newFile = new File(filePath + "\\" + newFileName);
+				if(newFile.exists()){
+					System.out.println("exist="+newFileName);
+					continue;
+				}
 				FileUtil.copyFile(filePath, f.getName(), filePath, newFileName);
 				if(f.exists()){
 					//System.out.println(f.getAbsolutePath());
