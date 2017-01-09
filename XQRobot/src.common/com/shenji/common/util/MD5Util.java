@@ -41,9 +41,8 @@ public abstract class MD5Util {
 
 	// 测试主函数
 	public static void main(String args[]) {
-		String s = new String("idggnoix881");
-		System.out.println("原始：" + s);
-		System.out.println("MD5后：" + md5(s));
+		String q = "申请领用数量大于该纳税人本次可领用数量" + "请确认已使用的发票已经验旧成功了，确认可领用的发票数量。";
+		System.out.println("MD5后：" + md5(q));
 
 	}
 }

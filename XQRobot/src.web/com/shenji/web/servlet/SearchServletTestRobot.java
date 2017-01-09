@@ -108,7 +108,7 @@ public class SearchServletTestRobot extends HttpServlet {
 			int radoiTypeInt = Integer.parseInt(request.getParameter("radioType_search"));
 			html = new Search().testRobot(searchTxt, 3, 1, radoiTypeInt);
 			for(String s:html){
-				out.write(s+"</br>");
+				out.write(s+"</br></br>");
 			} 		
 		}
 		out.close();

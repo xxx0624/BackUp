@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,6 +63,26 @@ public class FileUtil {
 		} else
 			return -1;
 
+	}
+	
+	public static int writeFile(String filePath, String fileName, String content){
+		File file = new File(filePath + File.separator + fileName);
+		if(file.exists()){
+			//return -1;
+		}
+		FileWriter fw = null;;
+		try {
+			fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(content);
+			bw.close();
+			fw.close();
+			return 1;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
 	}
 	
 
