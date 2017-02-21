@@ -104,17 +104,21 @@ public class SearchServlet2 extends HttpServlet {
 		
 		if(searchTxt.startsWith("如："))
 			searchTxt=searchTxt.replace("如：", "");
+		//搜索模块
 		if(tagTypeInt==1){
 			int radoiTypeInt = Integer.parseInt(request.getParameter("radioType_search"));
 			html = new Search().searchHtml(searchTxt, 1, radoiTypeInt);
 			out.write(html); 		
 		}
+		//词汇模块
 		if(tagTypeInt==2){
 			int radoiTypeInt = Integer.parseInt(request.getParameter("radioType_word"));
 			switch (radoiTypeInt) {
+			//最大粒度分词
 			case 1:
 				html = new Search().fenCi(searchTxt, 1);
 				break;
+			//最细粒度分词
 			case 2:
 				html = new Search().fenCi(searchTxt, 2);
 				break;
@@ -140,13 +144,13 @@ public class SearchServlet2 extends HttpServlet {
 			html = new OntoReasoning().getUserReasonerTreeXmlBySentence(searchTxt);
 			createSession(request,response,html);
 		}
-		
+		//常用语
 		if(tagTypeInt==4){		
 			html = new Search().getPhrase(searchTxt);
 			createSession(request,response,html);
 			
 		}
-		
+		//其他(即:重建索引)
 		if(tagTypeInt==6){
 			int radoiTypeInt = Integer.parseInt(request.getParameter("radioType_other"));
 			html="没有结果！！";
