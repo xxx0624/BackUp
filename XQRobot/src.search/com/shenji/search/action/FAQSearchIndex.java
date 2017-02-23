@@ -280,8 +280,8 @@ public class FAQSearchIndex extends SearchIndex {
 			String question = getQuestion(html);
 			String answer = getAnswer(html);
 			String uri = getURI(file);
-			String tag1 = getTAG(html, ".tag1");
-			String tag2 = getTAG(html, ".tag2");
+			String tag1 = getTAG(html, "tag1");
+			String tag2 = getTAG(html, "tag2");
 			bean.setAnswer(answer);
 			// bean.setContent(content);
 			bean.setQuestion(question);

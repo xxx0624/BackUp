@@ -24,15 +24,14 @@ public class CustomSynonymDic implements SynonymEngine {
 	private Directory directory;
 
 	public CustomSynonymDic() throws EngineException {
-		File file = new File(Configuration.indexPath + "/"
-				+ Configuration.mySynFolder);
+		File file = new File(Configuration.indexPath + "/" + Configuration.mySynFolder);
 		if (!file.exists())
-			throw new EngineException("CustomSynonymDic file is not Exist!");
+			throw new EngineException("CustomSynonymDic file["+file.getName()+"] is not Exist!");
 		try {
 			directory = FSDirectory.open(file);
 			indexSearcher = new IndexSearcher(directory);
 		} catch (IOException e) {
-			throw new EngineException("CustomSynonymDic open Exception!", e);
+			throw new EngineException("CustomSynonymDic["+file.getName()+"] open Exception!", e);
 		}
 	}
 
