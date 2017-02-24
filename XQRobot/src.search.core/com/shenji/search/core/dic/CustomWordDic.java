@@ -21,7 +21,7 @@ public class CustomWordDic implements CustomWordEngine {
 	private CustomWordDic() throws EngineException {
 		Log.getLogger().info("init: loading myDict.dic");
 		init();
-		// 做一次就可以了、、以后注释掉吧
+		// 做一次可以了、、以后注释掉吧
 		// removeDictDuplicate();
 	}
 
@@ -46,9 +46,10 @@ public class CustomWordDic implements CustomWordEngine {
 	}
 
 	public String[] mixCuttingEnCh(String content) {
+		//不分大小写
 		List<String> list = new ArrayList<String>();
 		for (String s : CustomWordDic.costomEnChDic) {
-			if (content.contains(s)) {
+			if (content.contains(s) || content.contains(s.toLowerCase())) {
 				list.add(s);
 			}
 		}
