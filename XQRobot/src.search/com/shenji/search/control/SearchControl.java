@@ -5,14 +5,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 //import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+
+
+
+
 
 
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
@@ -36,6 +43,8 @@ import com.shenji.search.control.IEnumSearch.ResultCode;
 import com.shenji.search.core.bean.ESearchRelation;
 import com.shenji.search.core.bean.SearchBean;
 import com.shenji.search.core.control.Fenci;
+import com.shenji.search.core.dic.CommonSynonymDic;
+import com.shenji.search.core.engine.SynonymEngine;
 import com.shenji.search.core.exception.EngineException;
 import com.shenji.search.core.exception.SearchException;
 import com.shenji.search.core.inter.ISearchFolder;
@@ -624,6 +633,8 @@ public class SearchControl extends Search {
 	
 	
 	private void filterByQATags(List<? extends XQSearchBean> beans, String userQuestion){
+		String extendUserQuestion= extendSynWords(userQuestion);
+		System.out.println("filterByQATags extend ("+userQuestion+") tobe ("+extendUserQuestion+")");
 		Iterator<? extends XQSearchBean> iterator = beans.iterator();
 		int tags2Count = 0;
 		int tags1Count = 0;
@@ -639,14 +650,14 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
@@ -660,14 +671,14 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
@@ -691,14 +702,14 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
@@ -712,14 +723,14 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
-						if(userQuestion.contains(t) && !t.equals("")){
+						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
 						}
@@ -731,6 +742,52 @@ public class SearchControl extends Search {
 			}
 			iterator.remove();
 		}
+	}
+	
+	/*
+	 * 扩展用户问题的同义词
+	 * 1. 堆用户问题进行分词
+	 * 2. 针对每个词扩展相应的同义词
+	 * 3. /进行分隔
+	 * */
+	private String extendSynWords(String sentence){
+		String extendSentenceString = sentence.toLowerCase();
+		// 同义词引擎
+		SynonymEngine synonymEngine = null;
+		try {
+			synonymEngine = new CommonSynonymDic();
+		} catch (EngineException e) {
+			System.err.println("extendSynWords("+sentence+") error...");
+			e.printStackTrace();
+			return extendSentenceString;
+		}
+		String words = new FenciControl().iKAnalysis(sentence);
+		String[] wordList = words.split("/");
+		Set<String> tempSynWordListSet = new HashSet<>();
+		tempSynWordListSet.add(extendSentenceString);
+		for(String w:wordList){
+			try {
+				String[] synWordList = synonymEngine.getSynonyms(w.toLowerCase());
+				for(String synW:synWordList){
+					if (synW == null || synW.length() == 0)
+						continue;
+					tempSynWordListSet.add(synW);
+				}
+			} catch (EngineException e) {
+				System.err.println("extendSynWords("+sentence+") error...");
+				e.printStackTrace();
+				if (synonymEngine != null)
+					synonymEngine.close();
+				return extendSentenceString;
+			}
+		}
+		if (synonymEngine != null)
+			synonymEngine.close();
+		extendSentenceString = "";
+		for(String s:tempSynWordListSet){
+			extendSentenceString += "/" + s.toLowerCase();
+		}
+		return extendSentenceString;
 	}
 	
 	private String pretreatment(String args) {
