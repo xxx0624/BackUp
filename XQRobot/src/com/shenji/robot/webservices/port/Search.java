@@ -186,7 +186,7 @@ public class Search {
 				System.out.println("基础查询");
 				reStr = new SearchControl().searchBasic(args, rType);
 				break;
-			//todo
+			//todo && not used
 			case BasicsWithoutLink://the result without link
 				System.out.println("基础查询without link");
 				reStr = new SearchControl().searchBasicWithoutLink(args, rType);

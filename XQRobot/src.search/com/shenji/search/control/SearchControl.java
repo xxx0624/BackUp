@@ -485,7 +485,7 @@ public class SearchControl extends Search {
 		return html;
 	}
 	
-	private List<? extends XQSearchBean> aftertreatmentWithoutCutline(String args,
+	private List<? extends XQSearchBean> aftertreatment_SortAndFilterAndWithoutCutline(String args,
 			List<? extends XQSearchBean> beans, Comparator comparator) {
 		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
 		try {
@@ -512,7 +512,7 @@ public class SearchControl extends Search {
 		return beans;
 	}
 	
-	private String aftertreatment(String args,
+	private String aftertreatment_SortAndFilter(String args,
 			List<? extends XQSearchBean> beans, Comparator comparator, String sentence) {
 		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
 		try {
@@ -838,7 +838,7 @@ public class SearchControl extends Search {
 		else {
 			List<XQSearchBean> beans = search(sentence, relation);
 			Log.getLogger().info("searchOrdinary(html) result size = " + beans.size());
-			return aftertreatment(sentence, beans,new SimilarityComparator<XQSearchBean>(), sentence);
+			return aftertreatment_SortAndFilter(sentence, beans,new SimilarityComparator<XQSearchBean>(), sentence);
 		}
 
 	}
@@ -1001,7 +1001,7 @@ public class SearchControl extends Search {
 			return resultShowBean;
 		}
 		else {
-			List<XQSearchBean> beans = (List<XQSearchBean>) aftertreatmentWithoutCutline(
+			List<XQSearchBean> beans = (List<XQSearchBean>) aftertreatment_SortAndFilterAndWithoutCutline(
 					sentence,
 					search(sentence, relation),
 					new SimilarityComparator<XQSearchBean>()
