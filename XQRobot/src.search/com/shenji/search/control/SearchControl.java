@@ -246,16 +246,6 @@ public class SearchControl extends Search {
 						iSearchFolder, relation, booleanSearch);
 			}
 		} else {
-			/*
-			 * XQSearchBean tempBean = new XQSearchBean();
-			 * tempBean.setQuestion("hehe"); tempBean.setAnswer("haha");
-			 * tempBean.setSimilarity(1); tempBean.setScore(1);
-			 * tempBean.setUri("faq/a.htm"); tempBean.setHtmlContent(
-			 * "亲~小琼没有明白您的意思，请适当的加上疑问词重新提问吧~(比如加上：为什么，怎么办呀之类的)"); List
-			 * tempBeanList = new ArrayList(); tempBeanList.add(tempBean); res =
-			 * (List<XQSearchBean>) tempBeanList;
-			 */
-			// return (List<XQSearchBean>)tempBeanList;
 			res = (List<XQSearchBean>) super.search(sentence, iSearchFolder,
 					relation, booleanSearch);
 		}
@@ -502,6 +492,10 @@ public class SearchControl extends Search {
 			// TODO Auto-generated catch block
 			Log.getLogger(this.getClass()).error(e.getMessage(), e);
 		}
+		//针对与问答库中问题一模一样的用户问题特殊处理
+		if(filterOnlyOneQA(beans, args)){
+			return beans;
+		}
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
 		System.out.println("[after sort] bean size=" + beans.size());
@@ -529,6 +523,8 @@ public class SearchControl extends Search {
 			// TODO Auto-generated catch block
 			Log.getLogger(this.getClass()).error(e.getMessage(), e);
 		}
+		//针对与问答库中问题一模一样的用户问题特殊处理
+		filterOnlyOneQA(beans, args);
 		// 自定义排序 important
 		maxAndMyDictSimilarity.sort(comparator, beans);
 		System.out.println("[after sort] bean size=" + beans.size());
@@ -601,6 +597,31 @@ public class SearchControl extends Search {
         */
 		// 添加分割线
 		return DividingLineServer.cutlineSort(beans);
+	}
+	
+	private boolean filterOnlyOneQA(List<? extends XQSearchBean> beans, String userQuestion){
+		Iterator<? extends XQSearchBean> iterator = beans.iterator();
+		boolean onlyOneQAFlag = false;
+		while(iterator.hasNext()){
+			XQSearchBean bean = iterator.next();
+			if(bean.getQuestion().trim().equals(userQuestion.trim())){
+				onlyOneQAFlag = true;
+				break;
+			}
+		}
+		if(onlyOneQAFlag == true){
+			iterator = beans.iterator();
+			while(iterator.hasNext()){
+				XQSearchBean bean = iterator.next();
+				if(bean.getQuestion().trim().equals(userQuestion.trim())){
+					continue;
+				}
+				else{
+					iterator.remove();
+				}
+			}
+		}
+		return onlyOneQAFlag;
 	}
 
 	private void filterByTopBetweenLowSimilarity(List<? extends XQSearchBean> beans){
@@ -1050,13 +1071,6 @@ public class SearchControl extends Search {
 			System.out.println("Type 4:list size = " + resultShowBean.getResult().size());
 			return resultShowBean;
 		}
-		/*
-		String html = this.searchOrdinary(sentence, relation);
-		//add deepleanring
-		//String html = this.searchOrdinaryByxxx0624(sentence, relation);
-		// System.out.println(html);
-		return this.convertHtmlToBean(html, number);
-		*/
 	}
 
 	public ResultShowBean searchFilterByOntoNum(
