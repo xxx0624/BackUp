@@ -1066,6 +1066,10 @@ public class SearchControl extends Search {
 			if(count <= 1){
 				code = ResultCode.Exact;
 			}
+			else{
+				//count = 2
+				code = ResultCode.NunExact;
+			}
 			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 			System.out.println("Type 4:code = " + resultShowBean.getCode().value());
 			System.out.println("Type 4:list size = " + resultShowBean.getResult().size());
