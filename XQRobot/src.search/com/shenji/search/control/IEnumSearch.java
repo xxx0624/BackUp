@@ -27,9 +27,13 @@ public class IEnumSearch {
 	}
 
 	public static enum ResultCode {
-		Exact(101), NunExact(102), // 101是确定回答，102是答案比较多的
-		NoSearchResult(301), NoOntoResult(302), Tips(303), IllegalArgumentException(
-				401), SystemError(402);
+		Exact(101), //101是确定回答
+		NunExact(102), //102是答案比较多的
+		NoSearchResult(301), 
+		NoOntoResult(302), 
+		Tips(303), 
+		IllegalArgumentException(401), 
+		SystemError(402);
 
 		private int value;
 

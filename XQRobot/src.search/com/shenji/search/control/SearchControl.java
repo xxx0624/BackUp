@@ -1,6 +1,7 @@
 package com.shenji.search.control;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -15,12 +16,6 @@ import java.util.concurrent.ExecutorService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 //import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-
-
-
-
-
 
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
@@ -51,6 +46,9 @@ import com.shenji.search.core.inter.ISearchFolder;
 import com.shenji.search.core.search.AbsBooleanSearch;
 import com.shenji.search.core.search.Search;
 import com.shenji.search.core.search.SearchThread;
+import com.shenji.search.enums.LogType.LogTypeEnum;
+import com.shenji.search.threadTool.InsertLocalLogExecutorPool;
+import com.shenji.search.threadTool.InsertLocalLogThread;
 import com.shenji.search.threadTool.InsertLogExecutorPool;
 import com.shenji.search.threadTool.InsertThread;
 import com.shenji.web.bean.QALogBean;
@@ -58,6 +56,8 @@ import com.shenji.web.bean.QALogBean;
 public class SearchControl extends Search {
 	
 	private static ExecutorService insertLogPool;
+	
+	private static ExecutorService insertLocalLogPool;
 	
 	private boolean pretreatmentResult = false;
 	
@@ -83,6 +83,9 @@ public class SearchControl extends Search {
 		super();
 		if(insertLogPool == null || insertLogPool.isTerminated()){
 			insertLogPool =  InsertLogExecutorPool.createInsertLogExecutorPool();
+		}
+		if(insertLocalLogPool == null || insertLocalLogPool.isTerminated()){
+			insertLocalLogPool = InsertLocalLogExecutorPool.createInsertLocalLogExecutorPool();
 		}
 	}
 
@@ -250,51 +253,6 @@ public class SearchControl extends Search {
 					relation, booleanSearch);
 		}
 		Log.getLogger().info("总匹配条数=" + res.size());
-		/*
-		 * 1.一问一答，则只取出一问一答(自己设定上限)。 2.剔除匹配度太低的问答对(自己设定下限)
-		 * 此处筛选的是倒排索引的score
-		 */
-		/*Iterator<XQSearchBean> it = res.iterator();
-		boolean noAnswerFlag = true;
-		int cntBean = 0;
-		boolean oneAnswerFlag = false;
-		double up_score = 2.10;
-		double low_score = 0.01;
-		int print_cnt = 3;
-		while (it.hasNext()) {
-			XQSearchBean cur = it.next();
-			if(cur.getScore()>low_score){
-				noAnswerFlag = false;
-			}
-			if (cntBean < print_cnt) {
-				System.out.println("current print No:" + cntBean);
-				System.out.println("score:" + cur.getScore());
-				System.out.println("question:" + cur.getQuestion());
-				System.out.println("answer:" + cur.getAnswer());
-			}
-			if (cntBean == 0 && oneAnswerFlag == false
-					&& cur.getScore() > up_score) {
-				oneAnswerFlag = true;
-				cntBean++;
-				continue;
-			}
-			if (oneAnswerFlag == true || cur.getScore() <= low_score) {
-				it.remove();
-			}
-			cntBean++;
-		}
-		if(noAnswerFlag==true && res.size()>0){
-			XQSearchBean tempAns = new XQSearchBean();
-			tempAns.setAnswer("由于新系统启用，新的知识库在完善扩展中，您的问题我们已经记录下来，该问题请关注神计报税公众号中相关解答.");
-			tempAns.setQuestion("友情提示:");
-			tempAns.setScore(res.get(0).getScore());
-			tempAns.setSimilarity(res.get(0).getSimilarity());
-			tempAns.setHtmlContent(res.get(0).getHtmlContent());	
-			res = new ArrayList<XQSearchBean>();
-			res.add(tempAns);
-		}
-		Log.getLogger().info("[upScore="+up_score+"][lowScore="+low_score+"] 筛选过后现匹配条数" + res.size());
-		*/
 		if(sentence.contains("7001")){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
@@ -652,7 +610,6 @@ public class SearchControl extends Search {
 		}
 	}
 	
-	
 	private void filterByQATags(List<? extends XQSearchBean> beans, String userQuestion){
 		String extendUserQuestion= extendSynWords(userQuestion);
 		System.out.println("filterByQATags extend ("+userQuestion+") tobe ("+extendUserQuestion+")");
@@ -1005,6 +962,75 @@ public class SearchControl extends Search {
 		return this.convertHtmlToBean(html, number);
 	}
 
+	public ResultShowBean searchOrdinaryNum_Log(
+			String sentence, 
+			int number,
+			ESearchRelation relation, 
+			int logType) 
+			throws SearchException, SearchException {
+		String str = pretreatment(sentence);
+		ResultShowBean resultShowBean = null;
+		if (pretreatmentResult){
+			//直接数据库中抽取答案
+			IEnumSearch.ResultCode code = ResultCode.Tips;
+			List<String> reList = new ArrayList<>();
+			reList.add("友情提示:");
+			reList.add(str.length() >= 2 ? str.substring(2):str);
+			resultShowBean = new ResultShowBean(code, reList);
+		}
+		else {
+			List<XQSearchBean> beans = (List<XQSearchBean>) aftertreatment_SortAndFilterAndWithoutCutline(
+					sentence,
+					search(sentence, relation),
+					new SimilarityComparator<XQSearchBean>()
+					);
+			Log.getLogger().info("searchOrdinary(no proxy) result size = " + beans.size());
+			if(beans.size() <= 0){
+				IEnumSearch.ResultCode code = ResultCode.Tips;
+				List<String> reList = new ArrayList<>();
+				String[] answerList = {
+						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
+						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
+						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~",
+						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！"
+						};
+				reList.add("友情提示：");
+				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
+				reList.add(answerList[randomAnswer]);
+				resultShowBean = new ResultShowBean(code, reList);
+			}
+			else{
+				IEnumSearch.ResultCode code = null;
+				List<String> reList = new ArrayList<>();
+				int count = 0;
+				Iterator<XQSearchBean> iterator = beans.iterator();
+				while(iterator.hasNext()) {
+					XQSearchBean em = iterator.next();
+					if (count >= number) {
+						break;
+					}
+					reList.add(em.getQuestion());
+					reList.add(em.getAnswer());
+					count++;
+				}
+				if(count <= 1){
+					code = ResultCode.Exact;
+				}
+				else{
+					//count >= 2
+					code = ResultCode.NunExact;
+				}
+				resultShowBean = new ResultShowBean(code, reList);
+			}
+		}
+		//log qa to local file
+		if(logType ==  LogTypeEnum.Log_local_file.value()){
+			Callable<List<? extends ResultShowBean>> c = new InsertLocalLogThread(sentence, resultShowBean);
+			insertLocalLogPool.submit(c);
+		}
+		return resultShowBean;
+	}
+	
 	public ResultShowBean searchOrdinaryNum(String sentence, int number,
 			ESearchRelation relation) throws SearchException, SearchException {
 		String str = pretreatment(sentence);
@@ -1077,6 +1103,7 @@ public class SearchControl extends Search {
 		}
 	}
 
+	
 	public ResultShowBean searchFilterByOntoNum(
 			String sentence, 
 			int number,

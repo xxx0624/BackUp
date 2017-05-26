@@ -66,7 +66,7 @@ public class Search {
 		return search.searchNum_NoProxy(args, number, relationType,
 				conditionType);
 	}
-
+	
 	protected String[] searchNum_NoProxy(String args, int number,
 			int relationType, int conditionType) {
 		// 这里必须protected，不然cglib反射找不到，如果public则会发布出去，不合理
@@ -137,13 +137,109 @@ public class Search {
 		return reStrs;
 	}
 	
+	/**
+	 * 查询
+	 * 
+	 * @param args
+	 *            问题
+	 * @param number
+	 *            问答对数
+	 * @param relationType
+	 *            关系类型（1或查询，2与查询,-1默认）
+	 * @param conditionType
+	 *            条件类型（1基础、2普通、3图谱过滤，-1默认）
+	 * @param logType
+	 *            是否log本地文件
+	 * @return 问答对
+	 */
+	public String[] searchNum(String args, int number, int relationType, int conditionType, int logType) {
+		Search search = ((Search) CglibProxy.createProxy(this,
+				new PortFileLogProxy()));
+		return search.searchNum_NoProxy_Log(args, number, relationType,conditionType, logType);
+	}
+	
+	protected String[] searchNum_NoProxy_Log(String args, int number, int relationType, int conditionType, int logType) {
+		// 这里必须protected，不然cglib反射找不到，如果public则会发布出去，不合理
+		Object[] searchEnums = null;
+		String[] reStrs = null;
+		ResultShowBean bean = null;
+		try {
+			searchEnums = this.getSearchEnum(relationType, conditionType);
+		} catch (IllegalArgumentException e) {
+			return new String[] {
+					String.valueOf(ResultCode.IllegalArgumentException.value()),
+					"参数错误!" };
+		}
+		ESearchRelation rType = (ESearchRelation) searchEnums[0];
+		IEnumSearch.SearchConditionType cType = (IEnumSearch.SearchConditionType) searchEnums[1];
+		System.out.println("search web service (no proxy):");
+		System.out.println("number = " + number + " relationType = " + relationType + " conditionType = " + conditionType);
+		try {
+			switch (cType) {
+			case Basics:// 基础查询
+				System.out.println("基础查询");
+				bean = new SearchControl().searchBasicNum(args, number, rType);
+				break;
+			case Ordinary:// 标准查询
+				System.out.println("标准查询");
+				bean = new SearchControl().searchOrdinaryNum_Log(args, number, rType, logType);
+				break;
+			case FilterByOnto:// 图谱推理过滤查询
+			{
+				try {
+					System.out.println("图谱推理");
+					bean = new SearchControl()
+							.searchFilterByOntoNum(
+									args,
+									number,
+									rType,
+									ReasonerFactory.createReasoner(ReasonerFactory.AUTOCOMPLEX),
+									new OntoDimensionComparator());
+					break;
+				} catch (OntoReasonerException e) {
+					// TODO Auto-generated catch block
+					return new String[] {
+							String.valueOf(ResultCode.NoOntoResult.value()),
+							StandardAnswer.str_noOnto };// 推理没有定位
+				}
+			}
+			default:
+				return new String[] {
+						String.valueOf(ResultCode.IllegalArgumentException
+								.value()), "参数错误!" };
+			}
+		} catch (SearchException e) {
+			// TODO Auto-generated catch block
+			if (e.getErrorCode().equals(
+					SearchException.ErrorCode.NoSearchResult)) {
+				return new String[] {
+						String.valueOf(ResultCode.NoSearchResult.value()),
+						"抱歉，暂未找到答案！" };
+			} else
+				Log.getLogger(this.getClass()).fatal("出大事了，搜索奔溃了！赶紧重启!", e);
+			return new String[] {
+					String.valueOf(ResultCode.SystemError.value()),
+					"抱歉，系统故障，暂未找到答案！" };
+
+		}
+		reStrs = this.getArraryByResultShowBean(bean);
+		System.out.println("23333:"+reStrs.length);
+		return reStrs;
+	}
+
+	
+	
 	/*
 	 * for test robot
 	 * */
 	public String[] testRobot(String args, int number, int relationType,
 			int conditionType) {
-		return new Search().searchNum_NoProxy(args, number, relationType,
-				conditionType);
+		return new Search().searchNum_NoProxy_Log(
+				args, 
+				number, 
+				relationType,
+				conditionType, 
+				1);
 	}
 
 	private Object[] getSearchEnum(int relationType, int conditionType)
