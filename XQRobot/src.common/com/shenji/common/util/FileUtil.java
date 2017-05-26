@@ -85,6 +85,41 @@ public class FileUtil {
 		return -1;
 	}
 	
+	public static int writeOrExtendFile(String filePath, String fileName, String content){
+		File file = new File(filePath + File.separator + fileName);
+		//System.out.println(file.getAbsolutePath());
+		FileWriter fw = null;
+		if(file.exists()){
+			try {
+				fw = new FileWriter(file, true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}
+		}
+		else{
+			try {
+				fw = new FileWriter(file, false);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}
+		}
+		try {
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(content);
+			bw.close();
+			fw.close();
+			return 1;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
 
 	public static void copyFile(String oldPath, String oldFileName,
 			String newPath,String newFileName) {
