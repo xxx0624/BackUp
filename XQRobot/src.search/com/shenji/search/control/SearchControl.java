@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 //import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
@@ -26,6 +27,7 @@ import com.shenji.robot.data.ResultShowBean;
 import com.shenji.robot.exception.OntoReasonerException;
 import com.shenji.robot.exception.OntoReasonerException.ErrorCode;
 import com.shenji.robot.inter.IComReasonerServer;
+import com.shenji.robot.util.CommaUtil;
 import com.shenji.search.action.BooleanSearch;
 import com.shenji.search.action.DBPhraseManager;
 import com.shenji.search.action.DividingLineServer;
@@ -619,8 +621,9 @@ public class SearchControl extends Search {
 		//Count
 		while(iterator.hasNext()){
 			XQSearchBean bean = iterator.next();
-			String tag1 = bean.getTag1();
-			String tag2 = bean.getTag2();
+			//remove chinese comma & whitespace
+			String tag1 = CommaUtil.replaceChineseComma(bean.getTag1());
+			String tag2 = CommaUtil.replaceChineseComma(bean.getTag2());
 			//确保tag1 tag2不能为null
 			if(tag1 != null && tag2 != null){
 				//qa with 2 tags
@@ -671,8 +674,9 @@ public class SearchControl extends Search {
 		iterator = beans.iterator();
 		while( iterator.hasNext() && ((tags1Count + tags2Count) > 0) ){
 			XQSearchBean bean = iterator.next();
-			String tag1 = bean.getTag1();
-			String tag2 = bean.getTag2();
+			//remove chinese comma & whitespace
+			String tag1 = CommaUtil.replaceChineseComma(bean.getTag1());
+			String tag2 = CommaUtil.replaceChineseComma(bean.getTag2());
 			//确保tag1 tag2不能为null
 			if(tag1 != null && tag2 != null){
 				//qa with 2 tags
