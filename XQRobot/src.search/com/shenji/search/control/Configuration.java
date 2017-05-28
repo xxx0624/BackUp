@@ -38,12 +38,14 @@ public class Configuration {
 	public static String synonmDict;
 	public static String mySynonmDict;
 	// xxx0624
+	/*
 	public static String faqFolderHowQ;
 	public static String faqFolderWhyQ;
 	public static String faqFolderWhereQ;
 	public static String faqFolderWhenQ;
 	public static String faqFolderWhatQ;
 	public static String faqFolderOrQ;
+	*/
 
 	/*
 	 * public static String dbIP; public static String dbName; public static
@@ -76,12 +78,14 @@ public class Configuration {
 				mySynonmDict = editor.get(dic_config, "MySynonmDict");
 
 				// xxx0624
+				/*
 				faqFolderHowQ = editor.get(system_config, "faqFolderHowQ");
 				faqFolderWhyQ = editor.get(system_config, "faqFolderWhyQ");
 				faqFolderWhereQ = editor.get(system_config, "faqFolderWhereQ");
 				faqFolderWhenQ = editor.get(system_config, "faqFolderWhenQ");
 				faqFolderWhatQ = editor.get(system_config, "faqFolderWhatQ");
 				faqFolderOrQ = editor.get(system_config, "faqFolderOrQ");
+				*/
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -94,6 +98,7 @@ public class Configuration {
 	public static String[] searchDocmentDirs = { notesPath + "/" + faqFolder };
 	public static String webPath = "http://" + IP + "/" + notesName;
 	// xxx0624
+	/*
 	public static String[] searchIndexDirsHowQ = { indexPath + "/"
 			+ faqFolderHowQ };
 	public static String[] searchDocmentDirsHowQ = { notesPath + "/"
@@ -118,6 +123,7 @@ public class Configuration {
 			+ faqFolderOrQ };
 	public static String[] searchDocmentDirsOrQ = { notesPath + "/"
 			+ faqFolderOrQ };
+	*/
 	/*
 	 * public static String faqwebPath = "http://" + IP + notesName +
 	 * File.separator + faqFolder;

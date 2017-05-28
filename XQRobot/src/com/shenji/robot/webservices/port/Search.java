@@ -133,7 +133,6 @@ public class Search {
 
 		}
 		reStrs = this.getArraryByResultShowBean(bean);
-		System.out.println("23333:"+reStrs.length);
 		return reStrs;
 	}
 	
@@ -223,7 +222,6 @@ public class Search {
 
 		}
 		reStrs = this.getArraryByResultShowBean(bean);
-		System.out.println("23333:"+reStrs.length);
 		return reStrs;
 	}
 

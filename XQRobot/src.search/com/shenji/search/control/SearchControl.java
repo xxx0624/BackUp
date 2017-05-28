@@ -67,6 +67,7 @@ public class SearchControl extends Search {
 	private double lowSimilarity = 0.01;
 
 	// 判断用户的意图，声明7种搜索所可能包含的关键词
+	/*
 	String[] howQ = { "有问题", "写错", "有错误", "有误", "帮我", "请帮忙", "怎", "如何", "解决办法",
 			"咋", "解决方法", "什么情况" };// 包括怎么样，怎么，怎么做，怎的，怎么办等一系列包括“怎”的疑问词
 	String[] whyQ = { "想问", "为什么", "为啥", "为嘛", "究竟", "难道", "什么原因", "何原因",
@@ -79,6 +80,7 @@ public class SearchControl extends Search {
 			"什么东西", "多少？", "是什么", "谁", "有什么", "什么事情", "多少是" };
 	String[] orQ = { "好不好", "吧？", "吧?", "是不是", "吗", "难道", "好不好", "是否", "能不能",
 			"可以不", "可否", "有没有", "了么", "了吗", "能否", "可不可以", "会不会", "还是" };// 包括是吗
+	*/	
 	String[] faqQ = {};
 
 	public SearchControl() {
@@ -112,109 +114,8 @@ public class SearchControl extends Search {
 				return Configuration.searchIndexDirs;
 			}
 		};
-		ISearchFolder iSearchFolderHowQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsHowQ;
-			}
-		};
-		ISearchFolder iSearchFolderWhyQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsWhyQ;
-			}
-		};
-		ISearchFolder iSearchFolderWhereQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsWhereQ;
-			}
-		};
-		ISearchFolder iSearchFolderWhenQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsWhenQ;
-			}
-		};
-		ISearchFolder iSearchFolderWhatQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsWhatQ;
-			}
-		};
-		ISearchFolder iSearchFolderOrQ = new ISearchFolder() {
-			@Override
-			public String[] getSearchFolder() {
-				// TODO Auto-generated method stub
-				return Configuration.searchIndexDirsOrQ;
-			}
-		};
 		// 针对可能包含的分类进行搜索，最后在汇总结果
 		List<XQSearchBean> res = null;
-		int classifyTag = 0;
-		if (judgeContainTag(sentence, howQ)) {
-			System.out.println("how");
-			// resHow = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderHowQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 1;
-			else
-				classifyTag = -1;
-		} else if (judgeContainTag(sentence, whyQ)) {
-			System.out.println("why");
-			// resWhy = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderWhyQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 2;
-			else
-				classifyTag = -1;
-		} else if (judgeContainTag(sentence, whereQ)) {
-			System.out.println("where");
-			// resWhere= (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderWhereQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 3;
-			else
-				classifyTag = -1;
-		} else if (judgeContainTag(sentence, whenQ)) {
-			System.out.println("when");
-			// resWhen = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderWhenQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 4;
-			else
-				classifyTag = -1;
-		} else if (judgeContainTag(sentence, whatQ)) {
-			System.out.println("what");
-			// resWhat = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderWhatQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 5;
-			else
-				classifyTag = -1;
-		} else if (judgeContainTag(sentence, orQ)) {
-			System.out.println("or");
-			// resOr = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolderOrQ, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 6;
-			else
-				classifyTag = -1;
-		} else {
-			System.out.println("faq");
-			// resFaq = (List<XQSearchBean>) super.search(sentence,
-			// iSearchFolder, relation, booleanSearch);
-			if (classifyTag == 0)
-				classifyTag = 7;
-			else
-				classifyTag = -1;
-		}
-		classifyTag = 7;
 		//special case 
 		String[] errorCodeList = { "3001", "5001", "6001", "7001", "8001", "9001"};
 		int errorIndex = -1;
@@ -227,34 +128,9 @@ public class SearchControl extends Search {
 		if(errorIndex!=-1){
 			sentence = errorCodeList[errorIndex]+"报错";
 		}
-		if (classifyTag != -1) {
-			if (classifyTag == 1) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderHowQ, relation, booleanSearch);
-			} else if (classifyTag == 2) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderWhyQ, relation, booleanSearch);
-			} else if (classifyTag == 3) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderWhereQ, relation, booleanSearch);
-			} else if (classifyTag == 4) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderWhenQ, relation, booleanSearch);
-			} else if (classifyTag == 5) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderWhatQ, relation, booleanSearch);
-			} else if (classifyTag == 6) {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolderOrQ, relation, booleanSearch);
-			} else {
-				res = (List<XQSearchBean>) super.search(sentence,
-						iSearchFolder, relation, booleanSearch);
-			}
-		} else {
-			res = (List<XQSearchBean>) super.search(sentence, iSearchFolder,
-					relation, booleanSearch);
-		}
+		res = (List<XQSearchBean>) super.search(sentence, iSearchFolder, relation, booleanSearch);
 		Log.getLogger().info("总匹配条数=" + res.size());
+		//special case
 		if(sentence.contains("7001")){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
@@ -296,16 +172,16 @@ public class SearchControl extends Search {
 	}
 
 	// 判断用户意图1
-	public boolean judgeContainTag(String sentence, String[] tags) {
+	/*public boolean judgeContainTag(String sentence, String[] tags) {
 		for (int i = 0; i < tags.length; i++) {
 			if (sentence.contains(tags[i]))
 				return true;
 		}
 		return false;
-	}
+	}*/
 
 	// 判断用户意图2
-	public boolean judgeContainTag2(String sentence) {
+	/*public boolean judgeContainTag2(String sentence) {
 		if (judgeContainTag(sentence, howQ))
 			return true;
 		else if (judgeContainTag(sentence, whyQ))
@@ -321,7 +197,7 @@ public class SearchControl extends Search {
 		else if (judgeContainTag(sentence, faqQ))
 			return true;
 		return false;
-	}
+	}*/
 
 	public String searchBasic(String sentence, ESearchRelation relation)
 			throws SearchException {
@@ -392,27 +268,6 @@ public class SearchControl extends Search {
 
 	private String aftertreatment(String args,
 			List<? extends XQSearchBean> beans, Comparator comparator) {
-		// 判断用户意图2
-		/*
-		 * if(judgeContainTag2(args)==false){ XQSearchBean tempBean = new
-		 * XQSearchBean(); tempBean.setQuestion("hehe");
-		 * tempBean.setAnswer("haha"); tempBean.setSimilarity(1);
-		 * tempBean.setScore(1); tempBean.setUri("faq/a.htm");
-		 * tempBean.setHtmlContent
-		 * ("亲~小琼没有明白您的意思，请适当的加上疑问词重新提问吧~(比如加上：为什么，怎么办呀之类的)"); List tempBeanList
-		 * = new ArrayList(); tempBeanList.add(tempBean); beans =
-		 * (List<XQSearchBean>) tempBeanList; MaxAndMyDictSimilarity
-		 * maxAndMyDictSimilarity = null; try { maxAndMyDictSimilarity = new
-		 * MaxAndMyDictSimilarity(args); } catch (EngineException e) { // TODO
-		 * Auto-generated catch block
-		 * Log.getLogger(this.getClass()).error(e.getMessage(), e); return
-		 * DividingLineServer.cutlineSort(beans); } // 设置相似度 try {
-		 * maxAndMyDictSimilarity.setSimilarity(beans); } catch (EngineException
-		 * e) { // TODO Auto-generated catch block
-		 * Log.getLogger(this.getClass()).error(e.getMessage(), e); } // 自定义排序
-		 * important maxAndMyDictSimilarity.sort(comparator, beans); String html
-		 * = DividingLineServer.cutlineSort(beans); return html; }
-		 */
 		MaxAndMyDictSimilarity maxAndMyDictSimilarity = null;
 		try {
 			maxAndMyDictSimilarity = new MaxAndMyDictSimilarity(args);

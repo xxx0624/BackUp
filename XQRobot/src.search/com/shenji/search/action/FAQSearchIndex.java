@@ -22,12 +22,11 @@ import com.shenji.search.core.exception.SearchException;
 public class FAQSearchIndex extends SearchIndex {
 	private int count = 0;
 	// 朱
-	/*
-	 * public static String[] indexPaths = new String[] {
-	 * Configuration.indexPath + File.separator + Configuration.faqFolder };
-	 */
-	// xxx0624
 	public static String[] indexPaths = new String[] {
+	  Configuration.indexPath + File.separator + Configuration.faqFolder };
+	 
+	// xxx0624
+	/*public static String[] indexPaths = new String[] {
 			Configuration.indexPath + File.separator + Configuration.faqFolder
 			,Configuration.indexPath + File.separator
 					+ Configuration.faqFolderHowQ,
@@ -42,7 +41,7 @@ public class FAQSearchIndex extends SearchIndex {
 			Configuration.indexPath + File.separator
 					+ Configuration.faqFolderOrQ 
 					};
-
+	*/
 	private FAQSearchIndex(String[] indexFolders) throws Exception {
 		super(indexFolders);
 		// TODO Auto-generated constructor stub
@@ -91,6 +90,7 @@ public class FAQSearchIndex extends SearchIndex {
 		return fields;
 	}
 
+	/*
 	public String judgeContainTag3(String sentence) {
 		if (sentence.contains("how"))
 			return Configuration.faqFolderHowQ;
@@ -108,6 +108,7 @@ public class FAQSearchIndex extends SearchIndex {
 			return Configuration.faqFolder;
 		return Configuration.faqFolder;
 	}
+	*/
 
 	public int addIndex(String q, String a, String tag) throws Exception {
 		q = q.toLowerCase();
@@ -116,7 +117,8 @@ public class FAQSearchIndex extends SearchIndex {
 		String fileName = FileService.getStringMD5String(q + a);
 		if (fileName == null)
 			throw new RuntimeException("文件名创建失败！");
-		String folderString = judgeContainTag3(tag);
+		//String folderString = judgeContainTag3(tag);
+		String folderString = Configuration.faqFolder;
 		String path = Configuration.notesPath + File.separator + folderString
 				+ File.separator;
 		if (FileService.addFile(fileText, path, fileName, ".htm", "UTF-8") == false) {
