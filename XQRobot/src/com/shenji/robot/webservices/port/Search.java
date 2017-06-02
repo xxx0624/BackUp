@@ -151,7 +151,7 @@ public class Search {
 	 *            是否log本地文件
 	 * @return 问答对
 	 */
-	public String[] searchNum(String args, int number, int relationType, int conditionType, int logType) {
+	public String[] searchNumLog(String args, int number, int relationType, int conditionType, int logType) {
 		Search search = ((Search) CglibProxy.createProxy(this,
 				new PortFileLogProxy()));
 		return search.searchNum_NoProxy_Log(args, number, relationType,conditionType, logType);
