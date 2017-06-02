@@ -5,6 +5,7 @@
 *.zip
 *.class
 *.scc
+*.log
 *.pyc
 .idea/
 target/
