@@ -18,7 +18,8 @@
   --%>
 
 <html>
-<%@ page import="org.apache.axis2.AxisFault,
+<%@ page import="javax.servlet.jsp.JspWriter,
+				 org.apache.axis2.AxisFault,
                  org.apache.axis2.Constants,
                  org.apache.axis2.addressing.EndpointReference,
                  org.apache.axis2.client.Options,

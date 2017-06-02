@@ -161,7 +161,7 @@ public class addIndexServlet extends HttpServlet {
 	}
 	
 	public String judgeContainTag3(String sentence){
-		if( sentence.contains("how") )
+		/*if( sentence.contains("how") )
 			return Configuration.faqFolderHowQ;
 		else if( sentence.contains("why") )
 			return Configuration.faqFolderWhyQ;
@@ -175,6 +175,7 @@ public class addIndexServlet extends HttpServlet {
 			return Configuration.faqFolderOrQ;
 		else if( sentence.contains("faq") )
 			return Configuration.faqFolder;
+		*/
 		return Configuration.faqFolder;
 	}
 	

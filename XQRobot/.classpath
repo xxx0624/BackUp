@@ -67,6 +67,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/proxool-0.9.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/proxool-cglib.jar"/>
+	<classpathentry kind="lib" path="D:/TJ/神计机器人相关问答系统/XQRobot源码/XQRobot/WebRoot/WEB-INF/lib/jsp-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
