@@ -3,21 +3,33 @@ package com.shenji.search.bean;
 import com.shenji.search.core.bean.SearchBean;
 
 public class XQSearchBean extends SearchBean {
+
 	public static class Field extends SearchBean.Field {
 		public static final String QUESTION = "question";
 		public static final String ANSWER = "answer";
 		public static final String TAG1 = "tag1";
 		public static final String TAG2 = "tag2";
+		public static final String ShortAnswer = "shortAnswer";
 		public static final String FileSuffixes = ".htm";
 	}
 
+	
 	private double similarity;
 	private String question;
 	private String answer;
 	private String htmlContent;
 	private String tag1;
 	private String tag2;
+	private String shortAnswer;
 
+
+	public String getShortAnswer() {
+		return shortAnswer;
+	}
+
+	public void setShortAnswer(String shortAnswer) {
+		this.shortAnswer = shortAnswer;
+	}
 
 	public String getTag1() {
 		return tag1;
@@ -70,8 +82,10 @@ public class XQSearchBean extends SearchBean {
 	@Override
 	public String toString() {
 		return "XQSearchBean [similarity=" + similarity + ", question="
-				+ question + ", answer=" + answer + ", htmlContent="
-				+ htmlContent + ", tags1=" + tag1 + ", tags2=" + tag2 + "]";
+				+ question + ", answer=" + answer 
+				+ ", htmlContent=" + htmlContent 
+				+ ", shortAnswer=" + shortAnswer 
+				+ ", tags1=" + tag1 + ", tags2=" + tag2 + "]";
 	}
 	
 }

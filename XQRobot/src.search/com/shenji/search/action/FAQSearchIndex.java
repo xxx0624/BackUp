@@ -61,7 +61,7 @@ public class FAQSearchIndex extends SearchIndex {
 			throw new SearchException("传入的bean数据非法！",
 					SearchException.ErrorCode.SearchBeanError);
 		}
-		List<Field> fields = new ArrayList<Field>(3);
+		List<Field> fields = new ArrayList<Field>(6);
 		Field q_field = new Field(XQSearchBean.Field.QUESTION,
 				searchBean.getQuestion(), Field.Store.YES,Field.Index.ANALYZED, 
 				TermVector.NO);
@@ -77,6 +77,9 @@ public class FAQSearchIndex extends SearchIndex {
 		Field uri_field = new Field(XQSearchBean.Field.URI,
 				searchBean.getUri(), Field.Store.YES, Field.Index.NOT_ANALYZED,
 				TermVector.NO);
+		Field shortAnswer_field = new Field(XQSearchBean.Field.ShortAnswer,
+				searchBean.getShortAnswer(), Field.Store.YES, Field.Index.NOT_ANALYZED, 
+				TermVector.NO);
 		/*
 		 * Field uri_field = new Field(XQSearchBean.Field.URI, "faq/" +
 		 * searchBean.getUri() + ".htm", Field.Store.YES,
@@ -87,6 +90,7 @@ public class FAQSearchIndex extends SearchIndex {
 		fields.add(uri_field);
 		fields.add(tag1_field);
 		fields.add(tag2_field);
+		fields.add(shortAnswer_field);
 		return fields;
 	}
 
@@ -284,16 +288,18 @@ public class FAQSearchIndex extends SearchIndex {
 			String uri = getURI(file);
 			String tag1 = getTAG(html, "tag1");
 			String tag2 = getTAG(html, "tag2");
+			String shortAnswer = getShortAnswer(html);
 			bean.setAnswer(answer);
 			// bean.setContent(content);
 			bean.setQuestion(question);
 			bean.setUri(uri);
 			bean.setTag1(tag1);
 			bean.setTag2(tag2);
+			bean.setShortAnswer(shortAnswer);
 			System.out.println("uri=" + uri);
 			super.addIndex(bean, tag);
 			System.out.print(count++ + " ");
-			if (count % 100 == 0)
+			if (count % 50 == 0)
 				System.out.println("");
 
 		} catch (Exception e) {
@@ -301,6 +307,7 @@ public class FAQSearchIndex extends SearchIndex {
 		}
 	}
 
+	
 	private String delelteHTMLTag(String htmlStr) {
 		htmlStr = htmlStr.replaceAll(".*?<body.*?>(.*?)", "$1"); // match body
 		htmlStr = htmlStr.replaceAll("(?is)<script.*?>.*?</script>", ""); // remove
@@ -314,6 +321,7 @@ public class FAQSearchIndex extends SearchIndex {
 		return htmlStr.trim();
 	}
 
+	
 	private String getQuestion(String htmlStr) {
 		org.jsoup.nodes.Document document = null;
 		document = Jsoup.parse(htmlStr);
@@ -321,6 +329,7 @@ public class FAQSearchIndex extends SearchIndex {
 		// System.out.println(meta.text());
 		return meta.text();
 	}
+	
 	
 	private String getTAG(String htmlStr, String tag) {
 		org.jsoup.nodes.Document document = null;
@@ -330,6 +339,7 @@ public class FAQSearchIndex extends SearchIndex {
         return meta.attr("content");
 	}
 
+	
 	private String getAnswer(String htmlStr) {
 		org.jsoup.nodes.Document document = null;
 		document = Jsoup.parse(htmlStr);
@@ -337,6 +347,16 @@ public class FAQSearchIndex extends SearchIndex {
 		// System.out.println(meta.text());
 		return meta.text();
 	}
+	
+	
+	private String getShortAnswer(String htmlStr) {
+		org.jsoup.nodes.Document document = null;
+		document = Jsoup.parse(htmlStr);
+		Elements meta = document.select(".shortAnswer");
+		// System.out.println(meta.text());
+		return meta.text();
+	}
+	
 
 	private String getURI(File file) {
 		try {
@@ -351,4 +371,5 @@ public class FAQSearchIndex extends SearchIndex {
 		}
 	}
 
+	
 }
