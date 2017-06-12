@@ -131,6 +131,7 @@ public class SearchControl extends Search {
 		res = (List<XQSearchBean>) super.search(sentence, iSearchFolder, relation, booleanSearch);
 		Log.getLogger().info("总匹配条数=" + res.size());
 		//special case
+		/*
 		if(sentence.contains("7001")){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
@@ -165,6 +166,7 @@ public class SearchControl extends Search {
 		else if(sentence.contains("4001")){
 			res = new ArrayList<XQSearchBean>();
 		}
+		*/
 		//add qa log
 		Callable<List<? extends XQSearchBean>> c = new InsertThread(sentence,res);
 		insertLogPool.submit(c);
@@ -486,6 +488,7 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -493,6 +496,7 @@ public class SearchControl extends Search {
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -507,6 +511,7 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -514,6 +519,7 @@ public class SearchControl extends Search {
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -539,6 +545,7 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -546,6 +553,7 @@ public class SearchControl extends Search {
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -560,6 +568,7 @@ public class SearchControl extends Search {
 					int existCnt = 0;
 					String[] tag1List = tag1.trim().split(",");
 					for(String t:tag1List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -567,6 +576,7 @@ public class SearchControl extends Search {
 					}
 					String[] tag2List = tag2.trim().split(",");
 					for(String t:tag2List){
+						t = t.trim();
 						if(extendUserQuestion.contains(t) && !t.equals("")){
 							existCnt += 1;
 							break;
@@ -835,6 +845,7 @@ public class SearchControl extends Search {
 			List<String> reList = new ArrayList<>();
 			reList.add("友情提示:");
 			reList.add(str.length() >= 2 ? str.substring(2):str);
+			reList.add(str.length() >= 2 ? str.substring(2):str);
 			resultShowBean = new ResultShowBean(code, reList);
 		}
 		else {
@@ -856,6 +867,7 @@ public class SearchControl extends Search {
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
 				reList.add(answerList[randomAnswer]);
+				reList.add(answerList[randomAnswer]);
 				resultShowBean = new ResultShowBean(code, reList);
 			}
 			else{
@@ -870,6 +882,7 @@ public class SearchControl extends Search {
 					}
 					reList.add(em.getQuestion());
 					reList.add(em.getAnswer());
+					reList.add(em.getShortAnswer());
 					count++;
 				}
 				if(count <= 1){
@@ -899,6 +912,7 @@ public class SearchControl extends Search {
 			List<String> reList = new ArrayList<>();
 			reList.add("友情提示:");
 			reList.add(str.length() >= 2 ? str.substring(2):str);
+			reList.add(str.length() >= 2 ? str.substring(2):str);
 			ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 			System.out.println("Type 1:code = " + resultShowBean.getCode().value());
 			System.out.println("Type 1:list size = " + resultShowBean.getResult().size());
@@ -925,6 +939,7 @@ public class SearchControl extends Search {
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
 				reList.add(answerList[randomAnswer]);
+				reList.add(answerList[randomAnswer]);
 				ResultShowBean resultShowBean = new ResultShowBean(code, reList);
 				System.out.println("Type 3:code = " + resultShowBean.getCode().value());
 				System.out.println("Type 3:list size = " + resultShowBean.getResult().size());
@@ -944,6 +959,7 @@ public class SearchControl extends Search {
 				}
 				reList.add(em.getQuestion());
 				reList.add(em.getAnswer());
+				reList.add(em.getShortAnswer());
 				System.out.println("(" + count + ")Type 4 question:" + em.getQuestion());
 				System.out.println("(" + count + ")Type 4 answer:" + em.getAnswer());
 				count++;

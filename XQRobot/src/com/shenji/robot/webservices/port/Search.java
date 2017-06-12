@@ -45,7 +45,14 @@ public class Search {
 		list.add(0, Integer.toString(code.value()));
 		return (String[]) list.toArray(new String[list.size()]);
 	}
-
+	/*
+	private String[] getArrayWithShortAnswerByResultShowBean(ResultShowBean bean){
+		ResultCode code = bean.getCode();
+		List<String> list = bean.getResult();
+		list.add(0, Integer.toString(code.value()));
+		return (String[]) list.toArray(new String[list.size()]);
+	}
+	*/
 	/**
 	 * 查询
 	 * 
