@@ -18,6 +18,8 @@ import org.jsoup.nodes.Element;
 //import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
+
+import com.ctc.wstx.util.StringUtil;
 import com.hp.hpl.jena.sparql.algebra.BeforeAfterVisitor;
 import com.shenji.common.exception.ConnectionPoolException;
 import com.shenji.common.log.Log;
@@ -415,11 +417,12 @@ public class SearchControl extends Search {
 	}
 	
 	private boolean filterOnlyOneQA(List<? extends XQSearchBean> beans, String userQuestion){
+		userQuestion = com.shenji.robot.util.StringUtil.formatUserQuestion(userQuestion);
 		Iterator<? extends XQSearchBean> iterator = beans.iterator();
 		boolean onlyOneQAFlag = false;
 		while(iterator.hasNext()){
 			XQSearchBean bean = iterator.next();
-			if(bean.getQuestion().trim().equals(userQuestion.trim())){
+			if(userQuestion.equals(com.shenji.robot.util.StringUtil.formatUserQuestion(bean.getQuestion()))){
 				onlyOneQAFlag = true;
 				break;
 			}

@@ -17,6 +17,25 @@ import com.shenji.onto.OntologyCommon;
 import com.shenji.onto.Configuration;
 
 public class StringUtil {
+	/*
+	 * remove Chinese comma and whitespace
+	 * */
+	public static String formatUserQuestion(String sentence){
+		/*sentence = sentence.replace("，", ",")
+				.replace(" ", "")
+				.replace("。", ".")
+				.replace("；", ";")
+				.replace("“", "\"")
+				.replace("”", "\"")
+				.replace("、", ".")
+				.replace("？", "?")
+				.replace("：", ":")
+				.replace("（", "(")
+				.replace("）", ")")
+				.trim();*/
+		sentence = sentence.replaceAll("[\\pP‘’“”]", ",").trim();
+		return sentence;
+	}
 	/**
 	 * 这个方法将JDom对象转换字符串.
 	 * 
@@ -79,7 +98,7 @@ public class StringUtil {
 	}
 
 	public static void main(String[] str) {
-		System.err.println(wordVerification("葛超是sbd22c_c@"));
+		System.err.println(formatUserQuestion("葛超是+~$22，‘’+-*。？！：（）“”；、22^=|<>～｀＄＾＋＝｜＜＞￥× sbd22c_c@"));
 	}
 
 }
