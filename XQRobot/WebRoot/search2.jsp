@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>今天你神计一下了吗2</title>
+<title>今天你神计一下了吗</title>
 <style>
 a:visited {
 	color: #0000FF;
@@ -160,7 +160,7 @@ a:visited {
 			<td>
 				<p style="font-size:5px;" align="center">
 					<a href="#">搜索风云榜</a> <font color="#0000FF">|</font> <a href="#">关于神技搜索</a>
-					<font color="#0000FF">|</font> <a href="#">About Shenji</a> &nbsp;
+					<font color="#0000FF">|</font> <a href="#">About Shenji-version-20170619-1805</a> &nbsp;
 				</p>
 			</td>
 		</tr>
