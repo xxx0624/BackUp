@@ -33,7 +33,9 @@ public class StringUtil {
 				.replace("（", "(")
 				.replace("）", ")")
 				.trim();*/
-		sentence = sentence.replaceAll("[\\pP‘’“”]", ",").trim();
+		if(sentence != null){
+			sentence = sentence.replaceAll("[\\pP‘’“”]", ",").trim();
+		}
 		return sentence;
 	}
 	/**

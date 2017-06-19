@@ -128,11 +128,12 @@ public class SearchControl extends Search {
 			}
 		}
 		if(errorIndex!=-1){
-			sentence = errorCodeList[errorIndex]+"报错";
+			sentence = sentence + "报错";
 		}
 		res = (List<XQSearchBean>) super.search(sentence, iSearchFolder, relation, booleanSearch);
 		Log.getLogger().info("总匹配条数=" + res.size());
 		//special case
+		/*
 		if(sentence.contains("7001")){
 			XQSearchBean tempAns = new XQSearchBean();
 			tempAns.setAnswer("您可以点开【错误详情】具体查看。7001是与CA证书有关的报错，主要集中在驱动安装不完整，U棒没有认出来。"
@@ -167,6 +168,7 @@ public class SearchControl extends Search {
 		else if(sentence.contains("4001")){
 			res = new ArrayList<XQSearchBean>();
 		}
+		*/
 		//add qa log
 		Callable<List<? extends XQSearchBean>> c = new InsertThread(sentence,res);
 		insertLogPool.submit(c);
