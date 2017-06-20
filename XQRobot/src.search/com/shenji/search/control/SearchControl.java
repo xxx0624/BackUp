@@ -433,7 +433,7 @@ public class SearchControl extends Search {
 			iterator = beans.iterator();
 			while(iterator.hasNext()){
 				XQSearchBean bean = iterator.next();
-				if(bean.getQuestion().trim().equals(userQuestion.trim())){
+				if(userQuestion.equals(com.shenji.robot.util.StringUtil.formatUserQuestion(bean.getQuestion()))){
 					continue;
 				}
 				else{
