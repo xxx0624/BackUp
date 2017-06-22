@@ -633,6 +633,7 @@ public class SearchControl extends Search {
 	}
 	
 	private String pretreatment(String args) {
+		return args;/*
 		String mattchingStr = null;
 		// 大小写转换
 		args = args.toLowerCase();
@@ -668,7 +669,7 @@ public class SearchControl extends Search {
 			}
 		}
 		return args;
-
+*/
 	}
 
 	public String searchOrdinary(String sentence, ESearchRelation relation)
@@ -854,9 +855,7 @@ public class SearchControl extends Search {
 				List<String> reList = new ArrayList<>();
 				String[] answerList = {
 						"您好，我是机器人小琼，您的提问方式有点小问题，请您重新提问才可能能得到新答案哟！",
-						"您好，小琼机器人不理解您的问题，请您重新提问题吧~~~谢谢您的合作",
-						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~",
-						"尊敬的客户您好，我是机器人小琼，我没有理解您的意思，请您重新提问吧！"
+						"亲，小琼机器人没有理解您的意思，请您重新提问题吧~~~"
 						};
 				reList.add("友情提示：");
 				int randomAnswer = ((int) (Math.random() * 10)) % answerList.length;
